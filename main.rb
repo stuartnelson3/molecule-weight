@@ -56,7 +56,7 @@ def main
   result = {}
 
   (1..molecules.length).to_a.each do |len|
-    array_of_keys = molecules.keys.combination(len).to_a
+    array_of_keys = molecules.keys.each_cons(len).to_a
     array_of_values = array_of_keys.map {|keys|
       keys.map {|k| molecules[k] }
     }
@@ -73,8 +73,16 @@ def parse_user_input input
 end
 
 class AminoAcid
-  attr_reader :weight
+  attr_reader :molecules, :weight, :combinations
   def initialize molecules
+    @molecules = molecules
     @weight = molecules.map {|m| MOLECULES[m] }.compact.inject(&:+)
+    @combinations = find_combinations
+  end
+
+  def find_combinations
+    a = []
+    (1..molecules.length).to_a.each {|i| a+=molecules.each_cons(i).to_a }
+    a
   end
 end

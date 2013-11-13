@@ -13,9 +13,27 @@ describe "molecules" do
 end
 
 describe AminoAcid do
+  let(:parsed_input) { parse_user_input("AEF3AYXZ") }
+  let(:subject)      { AminoAcid.new(parsed_input) }
+
   it "calculates the molecule weight" do
-    parsed_input = parse_user_input("AEF3AYXZ")
-    expect(AminoAcid.new(parsed_input).weight).to be_within(0.1).of(818.39)
+    expect(subject.weight).to be_within(0.1).of(818.39)
+  end
+
+  it "knows the possible combinations of the molecules" do
+    expect(AminoAcid.new(parsed_input).combinations).to eq(
+    [
+      ["a"], ["e"], ["f"], ["3a"], ["y"], ["x"], ["z"],
+      ["a", "e"], ["e", "f"], ["f", "3a"], ["3a", "y"],
+      ["y", "x"], ["x", "z"], ["a", "e", "f"], ["e", "f", "3a"],
+      ["f", "3a", "y"], ["3a", "y", "x"], ["y", "x", "z"],
+      ["a", "e", "f", "3a"], ["e", "f", "3a", "y"],
+      ["f", "3a", "y", "x"], ["3a", "y", "x", "z"],
+      ["a", "e", "f", "3a", "y"], ["e", "f", "3a", "y", "x"],
+      ["f", "3a", "y", "x", "z"], ["a", "e", "f", "3a", "y", "x"],
+      ["e", "f", "3a", "y", "x", "z"], ["a", "e", "f", "3a", "y", "x", "z"]
+    ]
+    )
   end
 end
 
