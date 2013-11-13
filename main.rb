@@ -1,6 +1,6 @@
 require 'pp'
 
-def molecules
+MOLECULES =
   {
     'a' => 71.04,
     'c' => 103.01,
@@ -43,7 +43,6 @@ def molecules
     'z' => 112.06,
     'u' => 85.05
   }
-end
 
 def main
   molecules = {
@@ -70,5 +69,12 @@ end
 # pp main
 
 def parse_user_input input
-  input.downcase.strip.scan(/[a-z][0-9]?/)
+  input.downcase.strip.scan(/[0-9]?[a-z]/)
+end
+
+class AminoAcid
+  attr_reader :weight
+  def initialize molecules
+    @weight = molecules.map {|m| MOLECULES[m] }.compact.inject(&:+)
+  end
 end
