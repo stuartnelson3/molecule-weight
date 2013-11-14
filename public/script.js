@@ -14,7 +14,6 @@ function postData(e) {
   params = {
     type: 'POST',
     data: data,
-    dataType: 'text',
     url: '/possible-matches',
     success: function(data) {
       data = JSON.parse(data)
