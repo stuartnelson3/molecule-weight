@@ -24,7 +24,7 @@ MOLECULES =
     'y' => 163.06,
     '3a' => 85.06,
     '3c' => 117.03,
-    '3d' => 192.05,
+    '3d' => 129.05,
     '3e' => 143.06,
     '3f' => 161.09,
     '3g' => 71.04,
@@ -85,7 +85,8 @@ class AminoAcid
   end
 
   def calculate_weight molecules
-    molecules.map {|m| MOLECULES[m] }.compact.inject(&:+)
+    # add 19 for H, OH, and cation
+    molecules.map {|m| MOLECULES[m] }.compact.inject(&:+).round(1) + 19
   end
 
   def find_combinations molecules
