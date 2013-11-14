@@ -10,6 +10,10 @@ describe "molecules" do
     expect(parse_user_input("A3L3TXZ")).to eq(%w(a 3l 3t x z))
   end
 
+  it "handles spaces in the input" do
+    expect(parse_user_input("A 3L 3T X Z")).to eq(%w(a 3l 3t x z))
+  end
+
 end
 
 describe AminoAcid do
@@ -21,18 +25,18 @@ describe AminoAcid do
   end
 
   it "knows the possible combinations of the molecules" do
-    expect(AminoAcid.new(parsed_input).combinations).to eq(
-    [
-      ["a"], ["e"], ["f"], ["3a"], ["y"], ["x"], ["z"],
-      ["a", "e"], ["e", "f"], ["f", "3a"], ["3a", "y"],
-      ["y", "x"], ["x", "z"], ["a", "e", "f"], ["e", "f", "3a"],
-      ["f", "3a", "y"], ["3a", "y", "x"], ["y", "x", "z"],
-      ["a", "e", "f", "3a"], ["e", "f", "3a", "y"],
-      ["f", "3a", "y", "x"], ["3a", "y", "x", "z"],
-      ["a", "e", "f", "3a", "y"], ["e", "f", "3a", "y", "x"],
-      ["f", "3a", "y", "x", "z"], ["a", "e", "f", "3a", "y", "x"],
-      ["e", "f", "3a", "y", "x", "z"], ["a", "e", "f", "3a", "y", "x", "z"]
-    ]
+    expect(subject.combinations).to eq(
+      [
+        ["a"], ["e"], ["f"], ["3a"], ["y"], ["x"], ["z"],
+        ["a", "e"], ["e", "f"], ["f", "3a"], ["3a", "y"],
+        ["y", "x"], ["x", "z"], ["a", "e", "f"], ["e", "f", "3a"],
+        ["f", "3a", "y"], ["3a", "y", "x"], ["y", "x", "z"],
+        ["a", "e", "f", "3a"], ["e", "f", "3a", "y"],
+        ["f", "3a", "y", "x"], ["3a", "y", "x", "z"],
+        ["a", "e", "f", "3a", "y"], ["e", "f", "3a", "y", "x"],
+        ["f", "3a", "y", "x", "z"], ["a", "e", "f", "3a", "y", "x"],
+        ["e", "f", "3a", "y", "x", "z"], ["a", "e", "f", "3a", "y", "x", "z"]
+      ]
     )
   end
 end
