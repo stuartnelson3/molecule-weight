@@ -22,7 +22,7 @@ function postData(e) {
 
       $(".peptide-weight").empty().append("<p>Peptide weight is "+data['weight']+"</p>");
       if (typeof seq_objs === "string") {
-        $(".result table").append("<tr><td>"+seq_objs+"</td></tr>")
+        $(".result table").append("<tr><td class='error'>"+seq_objs+"</td></tr>")
         return
       }
 
