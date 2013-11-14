@@ -97,7 +97,7 @@ class Peptide
     if h = Hash[matches.zip weights] and !h.empty?
       h # { "SEQUENCE" => weight }
     else
-      "No matches found"
+      "No matches found for #{weight}"
     end
   end
 end
