@@ -62,5 +62,10 @@ describe Peptide do
       expect(subject.calculate_weight(['a','e','f'])).to eq(expected_weight.round(1))
     end
   end
-end
 
+  context "AMINOACIDS" do
+    it "should raise on a bad key" do
+      expect { AMINOACIDS['NOMATCH'] }.to raise_error BadSequenceError
+    end
+  end
+end
