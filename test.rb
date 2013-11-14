@@ -2,22 +2,23 @@ require 'rspec'
 require './main'
 
 describe "molecules" do
+  let(:parser) { UserInput }
   it "splits on the user input" do
-    expect(parse_user_input("XZU")).to eq(%w(x z u))
+    expect(parser.parse("XZU")).to eq(%w(x z u))
   end
 
   it "splits with the number inputs" do
-    expect(parse_user_input("A3L3TXZ")).to eq(%w(a 3l 3t x z))
+    expect(parser.parse("A3L3TXZ")).to eq(%w(a 3l 3t x z))
   end
 
   it "handles spaces in the input" do
-    expect(parse_user_input("A 3L 3T X Z")).to eq(%w(a 3l 3t x z))
+    expect(parser.parse("A 3L 3T X Z")).to eq(%w(a 3l 3t x z))
   end
 
 end
 
 describe AminoAcid do
-  let(:parsed_input) { parse_user_input("AEF3AYXZ") }
+  let(:parsed_input) { UserInput.parse("AEF3AYXZ") }
   let(:subject)      { AminoAcid.new(parsed_input) }
 
   it "calculates the molecule weight" do
@@ -39,5 +40,6 @@ describe AminoAcid do
       ]
     )
   end
+
 end
 

@@ -68,8 +68,10 @@ def main
 end
 # pp main
 
-def parse_user_input input
-  input.downcase.strip.scan(/[0-9]?[a-z]/)
+class UserInput
+  def self.parse input
+    input.downcase.strip.scan(/[0-9]?[a-z]/)
+  end
 end
 
 class AminoAcid
