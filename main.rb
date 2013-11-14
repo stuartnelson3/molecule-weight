@@ -10,6 +10,8 @@ MOLECULES =
     'g' => 57.02,
     'h' => 137.06,
     'i' => 113.08,
+    'k' => 128.09,
+    'l' => 113.08,
     'm' => 131.04,
     'n' => 114.04,
     'p' => 97.05,
@@ -93,8 +95,12 @@ class AminoAcid
   end
 
   def possible_sequences weight
-    combinations.select {|combo|
-      calculate_weight(combo) == weight
-    }.map(&:join).map(&:upcase)
+    matches = combinations.select {|combo|
+      calculate_weight(combo)+5 > weight &&
+        calculate_weight(combo)-5 < weight
+    }
+    weights = matches.map {|m| calculate_weight(m) }
+    matches.map!(&:join).map!(&:upcase) # ['a','b'] => 'AB'
+    Hash[matches.zip weights] # { "SEQUENCE" => weight }
   end
 end

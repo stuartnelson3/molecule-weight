@@ -46,7 +46,7 @@ describe AminoAcid do
 
   it "lists a sequence based on a molecular weight" do
     yxz_weight = 163.06 + 111.07 + 112.06
-    expect(subject.possible_sequences(yxz_weight)).to eq(["YXZ"])
+    expect(subject.possible_sequences(yxz_weight)).to eq({ "YXZ" => yxz_weight })
   end
 end
 
