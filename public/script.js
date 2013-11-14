@@ -19,17 +19,19 @@ function postData(e) {
     success: function(data) {
       data = JSON.parse(data)
       seq_objs = data['possible_sequences'];
+
+      $(".peptide-weight").append("<p>Peptide weight is "+data['weight']+"</p>");
       if (typeof seq_objs === "string") {
-        $(".result table").append("<tr><td>"+data+"</td></tr>")
+        $(".result table").append("<tr><td>"+seq_objs+"</td></tr>")
         return
       }
+
       var sequences = Object.keys(seq_objs);
       for (var i = 0; i < sequences.length; i++) {
         var sequence = sequences[i]
         var weight = seq_objs[sequence]
         $(".result table").append("<tr><td>"+sequence+"</td><td>"+weight+"</td></tr>")
       }
-      $(".peptide-weight").append("<p>Peptide weight is "+data['weight']+"</p>");
     }
   }
 
