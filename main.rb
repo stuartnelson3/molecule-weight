@@ -1,5 +1,3 @@
-require 'pp'
-
 MOLECULES =
   {
     'a' => 71.04,
@@ -45,30 +43,6 @@ MOLECULES =
     'z' => 112.06,
     'u' => 85.05
   }
-
-def main
-  molecules = {
-    X: 43.2,
-    Y: 84.2,
-    Z: 28.5,
-    P: 73.02,
-    D: 29
-  }
-
-  result = {}
-
-  (1..molecules.length).to_a.each do |len|
-    array_of_keys = molecules.keys.each_cons(len).to_a
-    array_of_values = array_of_keys.map {|keys|
-      keys.map {|k| molecules[k] }
-    }
-    array_of_keys.each_with_index do |key, i|
-      result[key] = array_of_values[i].inject(&:+)
-    end
-  end
-  result
-end
-# pp main
 
 class UserInput
   def self.parse input
