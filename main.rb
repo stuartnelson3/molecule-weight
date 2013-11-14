@@ -94,6 +94,10 @@ class Peptide
     }
     weights = matches.map {|m| calculate_weight(m) }
     matches.map!(&:join).map!(&:upcase) # ['a','b'] => 'AB'
-    Hash[matches.zip weights] # { "SEQUENCE" => weight }
+    if h = Hash[matches.zip weights] and !h.empty?
+      h # { "SEQUENCE" => weight }
+    else
+      "No matches found"
+    end
   end
 end

@@ -51,6 +51,10 @@ describe Peptide do
     expect(subject.possible_sequences(yxz_weight)).to eq({ "YXZ" => yxz_weight.round(1) })
   end
 
+  it "notifies the user if there were no matches" do
+    expect(subject.possible_sequences(43532523354235)).to eq("No matches found")
+  end
+
   context "end and non-end fragments" do
     it "adds 18 to end fragments" do
       expected_weight = 163.06 + 111.07 + 112.06 + 18
