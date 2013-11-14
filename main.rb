@@ -50,7 +50,7 @@ class UserInput
   end
 end
 
-class AminoAcid
+class Peptide
   attr_reader :molecules, :weight, :combinations
   def initialize molecules
     @molecules = UserInput.parse molecules

@@ -19,8 +19,8 @@ describe UserInput do
 
 end
 
-describe AminoAcid do
-  let(:subject) { AminoAcid.new("AEF(3A)YXZ") }
+describe Peptide do
+  let(:subject) { Peptide.new("AEF(3A)YXZ") }
 
   it "calculates the molecule weight" do
     expect(subject.weight).to be_within(0.1).of(818.39 + 19)
@@ -43,7 +43,7 @@ describe AminoAcid do
   end
 
   it "knows the weight of a combination" do
-    expect(AminoAcid.new("XZU").weight).to eq(308.2 + 19)
+    expect(Peptide.new("XZU").weight).to eq(308.2 + 19)
   end
 
   it "lists a sequence based on a molecular weight" do
