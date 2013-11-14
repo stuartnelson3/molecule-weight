@@ -10,7 +10,13 @@ $(document).on("click", "button", function(e) {
     dataType: 'text',
     url: '/possible-matches',
     success: function(data) {
-      $(".result").html(data)
+      data = JSON.parse(data)['possible_sequences'];
+      var sequences = Object.keys(data);
+      for (var i = 0; i < sequences.length; i++) {
+        var sequence = sequences[i]
+        var weight = data[sequence]
+        $(".result table").append("<tr><td>"+sequence+"</td><td>"+weight+"</td></tr>")
+      }
     }
   }
 
