@@ -54,13 +54,26 @@ class Peptide
   attr_reader :molecules, :weight, :combinations
   def initialize molecules
     @molecules = UserInput.parse molecules
-    @weight = calculate_weight @molecules
+    @weight = calculate_weight @molecules, :original
     @combinations = find_combinations @molecules
   end
 
-  def calculate_weight molecules
-    # add 19 for H, OH, and cation
-    molecules.map {|m| MOLECULES[m] }.compact.inject(&:+).round(1) + 19
+  def calculate_adjustment molecules, original
+    if original || end_of_fragment?(molecules)
+      18
+    else
+      19
+    end
+  end
+
+  def end_of_fragment? molecules
+    @molecules[-molecules.length, molecules.length] == molecules
+  end
+
+  def calculate_weight molecules, original = false
+    weight_adjustment = calculate_adjustment molecules, original
+    weights = molecules.map {|m| MOLECULES[m] }
+    weights.compact.inject(&:+).round(1) + weight_adjustment
   end
 
   def find_combinations molecules

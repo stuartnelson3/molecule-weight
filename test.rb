@@ -23,7 +23,7 @@ describe Peptide do
   let(:subject) { Peptide.new("AEF(3A)YXZ") }
 
   it "calculates the molecule weight" do
-    expect(subject.weight).to be_within(0.1).of(818.39 + 19)
+    expect(subject.weight).to be_within(0.1).of(818.39 + 18)
   end
 
   it "knows the possible combinations of the molecules" do
@@ -43,12 +43,24 @@ describe Peptide do
   end
 
   it "knows the weight of a combination" do
-    expect(Peptide.new("XZU").weight).to eq(308.2 + 19)
+    expect(Peptide.new("XZU").weight).to eq(308.2 + 18)
   end
 
   it "lists a sequence based on a molecular weight" do
-    yxz_weight = 163.06 + 111.07 + 112.06 + 19
+    yxz_weight = 163.06 + 111.07 + 112.06 + 18
     expect(subject.possible_sequences(yxz_weight)).to eq({ "YXZ" => yxz_weight.round(1) })
+  end
+
+  context "end and non-end fragments" do
+    it "adds 18 to end fragments" do
+      expected_weight = 163.06 + 111.07 + 112.06 + 18
+      expect(subject.calculate_weight(['y','x','z'])).to eq(expected_weight.round(1))
+    end
+
+    it "adds 19 to non-ending fragments" do
+      expected_weight = 71.04 + 129.04 + 147.07 + 19
+      expect(subject.calculate_weight(['a','e','f'])).to eq(expected_weight.round(1))
+    end
   end
 end
 
