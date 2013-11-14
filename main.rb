@@ -77,8 +77,8 @@ end
 class AminoAcid
   attr_reader :molecules, :weight, :combinations
   def initialize molecules
-    @molecules = molecules
-    @weight = molecules.map {|m| MOLECULES[m] }.compact.inject(&:+)
+    @molecules = UserInput.parse molecules
+    @weight = @molecules.map {|m| MOLECULES[m] }.compact.inject(&:+)
     @combinations = find_combinations
   end
 
