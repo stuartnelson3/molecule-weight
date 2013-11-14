@@ -1,4 +1,11 @@
-$(document).on("click", "button", function(e) {
+$(document).on("click", "button", postData);
+$(document).on("keypress", function(e) {
+  if (e.keyCode === 13) {
+    postData();
+  }
+});
+
+function postData(e) {
   var data = {
     peptide_sequence: $("input[name=peptide_sequence]").val(),
     weight: parseFloat($("input[name=weight]").val())
@@ -11,6 +18,10 @@ $(document).on("click", "button", function(e) {
     url: '/possible-matches',
     success: function(data) {
       data = JSON.parse(data)['possible_sequences'];
+      if (typeof data === "string") {
+        $(".result table").append("<tr><td>"+data+"</td></tr>")
+        return
+      }
       var sequences = Object.keys(data);
       for (var i = 0; i < sequences.length; i++) {
         var sequence = sequences[i]
@@ -21,4 +32,4 @@ $(document).on("click", "button", function(e) {
   }
 
   $.ajax(params);
-});
+};
