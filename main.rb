@@ -78,13 +78,23 @@ class AminoAcid
   attr_reader :molecules, :weight, :combinations
   def initialize molecules
     @molecules = UserInput.parse molecules
-    @weight = @molecules.map {|m| MOLECULES[m] }.compact.inject(&:+)
-    @combinations = find_combinations
+    @weight = calculate_weight @molecules
+    @combinations = find_combinations @molecules
   end
 
-  def find_combinations
+  def calculate_weight molecules
+    molecules.map {|m| MOLECULES[m] }.compact.inject(&:+)
+  end
+
+  def find_combinations molecules
     a = []
     (1..molecules.length).to_a.each {|i| a+=molecules.each_cons(i).to_a }
     a
+  end
+
+  def possible_sequences weight
+    combinations.select {|combo|
+      calculate_weight(combo) == weight
+    }.map(&:join).map(&:upcase)
   end
 end
