@@ -87,10 +87,13 @@ class Peptide
     a
   end
 
+  def combination_in_range combo, weight
+    (calculate_weight(combo)-5..calculate_weight(combo)+5).cover? weight
+  end
+
   def possible_sequences weight
     matches = combinations.select {|combo|
-      calculate_weight(combo)+5 > weight &&
-        calculate_weight(combo)-5 < weight
+      combination_in_range combo, weight
     }
     weights = matches.map {|m| calculate_weight(m) }
     matches.map!(&:join).map!(&:upcase) # ['a','b'] => 'AB'
