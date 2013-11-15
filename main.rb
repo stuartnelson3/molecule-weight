@@ -60,7 +60,7 @@ class Peptide
   def initialize molecules
     @molecules = UserInput.parse molecules
     @weight = calculate_weight @molecules, :original
-    @combinations = MoleculeCombinations.find_combinations @molecules
+    @combinations = MoleculeCombinations.find_for @molecules
   end
 
   def calculate_weight molecules, original = false
@@ -86,7 +86,7 @@ class Peptide
 end
 
 class MoleculeCombinations
-  def self.find_combinations molecules
+  def self.find_for molecules
     a = []
     (1..molecules.length).to_a.each {|i| a+=molecules.each_cons(i).to_a }
     a
