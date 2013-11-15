@@ -60,17 +60,11 @@ class Peptide
   def initialize molecules
     @molecules = UserInput.parse molecules
     @weight = calculate_weight @molecules, :original
-    @combinations = find_combinations @molecules
+    @combinations = MoleculeCombinations.find_combinations @molecules
   end
 
   def calculate_weight molecules, original = false
     FragmentWeight.new(@molecules).calculate molecules, original
-  end
-
-  def find_combinations molecules
-    a = []
-    (1..molecules.length).to_a.each {|i| a+=molecules.each_cons(i).to_a }
-    a
   end
 
   def combination_in_range combo, weight
@@ -88,6 +82,14 @@ class Peptide
     else
       "No matches found for #{weight}"
     end
+  end
+end
+
+class MoleculeCombinations
+  def self.find_combinations molecules
+    a = []
+    (1..molecules.length).to_a.each {|i| a+=molecules.each_cons(i).to_a }
+    a
   end
 end
 
