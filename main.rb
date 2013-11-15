@@ -78,7 +78,7 @@ class Peptide
   def calculate_weight molecules, original = false
     weight_adjustment = calculate_adjustment molecules, original
     weights = molecules.map {|m| AMINOACIDS[m] }
-    weights.compact.inject(&:+).round(1) + weight_adjustment
+    weights.inject(&:+).round(1) + weight_adjustment
   end
 
   def find_combinations molecules
