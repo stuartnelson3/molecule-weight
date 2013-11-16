@@ -53,7 +53,10 @@ parsePeptide sequence = [ match | ((match,_),_) <- regexSequence ]
                         where regexSequence = gmatchRegexPR "\\([0-9][a-z]\\)|[a-z]" lowerSequence
                               lowerSequence = lowerString sequence
 
+calculateWeight :: [[Char]] -> Float
+calculateWeight sequence = sum aminoAcids
+                           where aminoAcids = [ aminoAcidWeight x | x <- sequence ]
 main = do
-  print "What character do you want?"
+  printf "Enter your sequence:"
   sequence <- getLine
-  print $ parsePeptide sequence
+  print $ calculateWeight $ parsePeptide sequence
