@@ -1,5 +1,7 @@
 import Text.RegexPR
+import Data.Char
 
+aminoAcidWeight :: [Char] -> Float
 aminoAcidWeight x | x == "a"    = 71.04
                   | x == "c"    = 103.01
                   | x == "d"    = 115.03
@@ -43,8 +45,13 @@ aminoAcidWeight x | x == "a"    = 71.04
                   | x == "z"    = 112.06
                   | x == "u"    = 85.05
 
+lowerString :: [Char] -> [Char]
+lowerString string = [ toLower x | x <- string ]
+
+parsePeptide :: [Char] -> [[Char]]
 parsePeptide sequence = [ match | ((match,_),_) <- regexSequence ]
-                        where regexSequence = gmatchRegexPR "\\([0-9][a-z]\\)|[a-z]" sequence
+                        where regexSequence = gmatchRegexPR "\\([0-9][a-z]\\)|[a-z]" lowerSequence
+                              lowerSequence = lowerString sequence
 
 main = do
   print "What character do you want?"
