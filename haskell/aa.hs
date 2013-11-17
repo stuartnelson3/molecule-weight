@@ -56,7 +56,12 @@ parsePeptide sequence = [ match | ((match,_),_) <- regexSequence ]
 calculateWeight :: [[Char]] -> Float
 calculateWeight sequence = sum aminoAcids
                            where aminoAcids = [ aminoAcidWeight x | x <- sequence ]
+
+fragmentsByLength len (x:xs)
+  | length (x:xs) >= len = (take len (x:xs)):(fragmentsByLength len xs)
+  | otherwise            = []
+
 main = do
   print "Enter your sequence:"
   sequence <- getLine
-  print $ calculateWeight $ parsePeptide sequence
+  print $ map calculateWeight (fragmentsByLength 3 $ parsePeptide sequence)
