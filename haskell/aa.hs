@@ -1,5 +1,6 @@
 import Text.RegexPR
 import Data.Char
+import Data.List
 
 aminoAcidWeight :: [Char] -> Float
 aminoAcidWeight "a"    = 71.04
@@ -54,7 +55,7 @@ parsePeptide sequence = [ match | ((match,_),_) <- regexSequence ]
                               lowerSequence = lowerString sequence
 
 calculateWeight :: [[Char]] -> Float
-calculateWeight sequence = sum aminoAcids
+calculateWeight sequence = 19 + sum aminoAcids
                            where aminoAcids = [ aminoAcidWeight x | x <- sequence ]
 
 possibleFragments sequence = concat [ fragmentsByLength x sequence | x <- [1..length sequence] ]
@@ -64,7 +65,17 @@ fragmentsByLength len (x:xs)
   | length (x:xs) >= len = (take len (x:xs)):(fragmentsByLength len xs)
   | otherwise            = []
 
+weightWithinTolerance weight fragment = fragmentWeight + 5 > weight && fragmentWeight - 5 < weight
+                                        where fragmentWeight = calculateWeight fragment
+
+possibleMatches weight fragments = [ humanReadable fragment | fragment <- fragments,
+                                     weightWithinTolerance weight fragment ]
+humanReadable fragment = [toUpper x | x <- intercalate "" fragment]
+
 main = do
-  print "Enter your sequence:"
-  sequence <- getLine
-  print $ map calculateWeight (possibleFragments $ parsePeptide sequence)
+  -- print "Enter your sequence:"
+  -- sequence <- getLine
+  print $ possibleMatches foundWeight (possibleFragments $ parsePeptide sequence)
+  where sequence = "V(3D)NK(3F)NKEXCNZRAIEUALDPNLNDQQFHUKIWZIIXDC"
+        foundWeight = 1990.8
+
