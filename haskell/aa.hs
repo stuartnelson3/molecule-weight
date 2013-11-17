@@ -57,6 +57,9 @@ calculateWeight :: [[Char]] -> Float
 calculateWeight sequence = sum aminoAcids
                            where aminoAcids = [ aminoAcidWeight x | x <- sequence ]
 
+possibleFragments sequence = concat [ fragmentsByLength x sequence | x <- [1..length sequence] ]
+
+fragmentsByLength 1   (x:xs) = [ x:[] | x <- (x:xs) ]
 fragmentsByLength len (x:xs)
   | length (x:xs) >= len = (take len (x:xs)):(fragmentsByLength len xs)
   | otherwise            = []
@@ -64,4 +67,4 @@ fragmentsByLength len (x:xs)
 main = do
   print "Enter your sequence:"
   sequence <- getLine
-  print $ map calculateWeight (fragmentsByLength 3 $ parsePeptide sequence)
+  print $ map calculateWeight (possibleFragments $ parsePeptide sequence)
