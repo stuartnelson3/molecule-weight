@@ -47,6 +47,7 @@ aminoAcidWeight "(3y)" = 117.08
 aminoAcidWeight "x"    = 111.07
 aminoAcidWeight "z"    = 112.06
 aminoAcidWeight "u"    = 85.05
+aminoAcidWeight x      = 0.0
 
 lowerString :: [Char] -> [Char]
 lowerString string = [ toLower x | x <- string ]
@@ -64,8 +65,9 @@ possibleFragments :: [[Char]] -> [[[Char]]]
 possibleFragments peptideSequence = concat [ fragmentsByLength x peptideSequence | x <- [1..length peptideSequence] ]
 
 fragmentsByLength :: Int -> [[Char]] -> [[[Char]]]
-fragmentsByLength 1   (x:xs) = [ a:[] | a <- (x:xs) ]
+fragmentsByLength _ []   = []
 fragmentsByLength len (x:xs)
+  | len == 1             = [ a:[] | a <- (x:xs) ]
   | length (x:xs) >= len = (take len (x:xs)):(fragmentsByLength len xs)
   | otherwise            = []
 
