@@ -73,15 +73,17 @@ possibleMatches weight fragments = [ fragment | fragment <- fragments,
 
 humanReadable fragment = [toUpper x | x <- intercalate "" fragment]
 
+calculationResults sequence weight = results
+  where pf = possibleFragments $ parsePeptide sequence
+        pm = possibleMatches weight pf
+        humanPM = map humanReadable pm
+        pw = map calculateWeight pm
+        results = zip humanPM pw
+
 main = do
   -- print "Enter your sequence:"
   -- sequence <- getLine
-  print zipped
+  print $ calculationResults sequence weight
   where sequence = "V(3D)NK(3F)NKEXCNZRAIEUALDPNLNDQQFHUKIWZIIXDC"
-        foundWeight = 1990.8
-        pf = possibleFragments $ parsePeptide sequence
-        pm = possibleMatches foundWeight pf
-        humanPM = map humanReadable pm
-        pw = map calculateWeight pm
-        zipped = zip humanPM pw
+        weight   = 1990.8
 
