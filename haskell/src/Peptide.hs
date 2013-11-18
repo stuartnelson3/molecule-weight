@@ -60,22 +60,28 @@ calculateWeight :: [[Char]] -> Float
 calculateWeight sequence = 19 + sum aminoAcids
                            where aminoAcids = [ aminoAcidWeight x | x <- sequence ]
 
+possibleFragments :: [[Char]] -> [[[Char]]]
 possibleFragments sequence = concat [ fragmentsByLength x sequence | x <- [1..length sequence] ]
 
+fragmentsByLength :: Int -> [[Char]] -> [[[Char]]]
 fragmentsByLength 1   (x:xs) = [ x:[] | x <- (x:xs) ]
 fragmentsByLength len (x:xs)
   | length (x:xs) >= len = (take len (x:xs)):(fragmentsByLength len xs)
   | otherwise            = []
 
+weightWithinTolerance :: Float -> [[Char]] -> Bool
 weightWithinTolerance weight fragment = fragmentWeight + 5 > weight && fragmentWeight - 5 < weight
                                         where fragmentWeight = calculateWeight fragment
 
+possibleMatches :: Float -> [[[Char]]] -> [[[Char]]]
 possibleMatches weight fragments = [ fragment | fragment <- fragments,
                                      weightWithinTolerance weight fragment ]
 
+humanReadable :: [[Char]] -> [Char]
 humanReadable fragment = [toUpper x | x <- intercalate "" fragment]
 
-calculationResults sequence weight = results
+calculationResults :: Float -> [Char] -> [([Char], Float)]
+calculationResults weight sequence = results
   where pf = possibleFragments $ parsePeptide sequence
         pm = possibleMatches weight pf
         humanPM = map humanReadable pm
