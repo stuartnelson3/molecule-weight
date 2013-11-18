@@ -1,3 +1,5 @@
+module Peptide (calculationResults) where
+
 import Text.RegexPR
 import Data.Char
 import Data.List
@@ -79,11 +81,3 @@ calculationResults sequence weight = results
         humanPM = map humanReadable pm
         pw = map calculateWeight pm
         results = zip humanPM pw
-
-main = do
-  -- print "Enter your sequence:"
-  -- sequence <- getLine
-  print $ calculationResults sequence weight
-  where sequence = "V(3D)NK(3F)NKEXCNZRAIEUALDPNLNDQQFHUKIWZIIXDC"
-        weight   = 1990.8
-
