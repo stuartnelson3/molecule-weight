@@ -11,13 +11,13 @@ function postData(e) {
     weight: parseFloat($("input[name=weight]").val())
   };
 
-  params = {
+  var params = {
     type: 'POST',
     data: data,
     url: '/possible-matches',
     success: function(data) {
       data = JSON.parse(data)
-      seq_objs = data['possible_sequences'];
+      var seq_objs = data['possible_sequences'];
 
       $(".peptide-weight").empty().append("<p>Peptide weight is "+data['weight']+"</p>");
       if (typeof seq_objs === "string") {
