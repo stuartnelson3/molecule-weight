@@ -52,19 +52,19 @@ lowerString :: [Char] -> [Char]
 lowerString string = [ toLower x | x <- string ]
 
 parsePeptide :: [Char] -> [[Char]]
-parsePeptide sequence = [ match | ((match,_),_) <- regexSequence ]
+parsePeptide peptideSequence = [ match | ((match,_),_) <- regexSequence ]
                         where regexSequence = gmatchRegexPR "\\([0-9][a-z]\\)|[a-z]" lowerSequence
-                              lowerSequence = lowerString sequence
+                              lowerSequence = lowerString peptideSequence
 
 calculateWeight :: [[Char]] -> Float
-calculateWeight sequence = 19 + sum aminoAcids
-                           where aminoAcids = [ aminoAcidWeight x | x <- sequence ]
+calculateWeight peptideSequence = 19 + sum aminoAcids
+                           where aminoAcids = [ aminoAcidWeight x | x <- peptideSequence ]
 
 possibleFragments :: [[Char]] -> [[[Char]]]
-possibleFragments sequence = concat [ fragmentsByLength x sequence | x <- [1..length sequence] ]
+possibleFragments peptideSequence = concat [ fragmentsByLength x peptideSequence | x <- [1..length peptideSequence] ]
 
 fragmentsByLength :: Int -> [[Char]] -> [[[Char]]]
-fragmentsByLength 1   (x:xs) = [ x:[] | x <- (x:xs) ]
+fragmentsByLength 1   (x:xs) = [ a:[] | a <- (x:xs) ]
 fragmentsByLength len (x:xs)
   | length (x:xs) >= len = (take len (x:xs)):(fragmentsByLength len xs)
   | otherwise            = []
@@ -81,8 +81,8 @@ humanReadable :: [[Char]] -> [Char]
 humanReadable fragment = [toUpper x | x <- intercalate "" fragment]
 
 calculationResults :: Float -> [Char] -> [([Char], Float)]
-calculationResults weight sequence = results
-  where pf = possibleFragments $ parsePeptide sequence
+calculationResults weight peptideSequence = results
+  where pf = possibleFragments $ parsePeptide peptideSequence
         pm = possibleMatches weight pf
         humanPM = map humanReadable pm
         pw = map calculateWeight pm
