@@ -68,14 +68,20 @@ fragmentsByLength len (x:xs)
 weightWithinTolerance weight fragment = fragmentWeight + 5 > weight && fragmentWeight - 5 < weight
                                         where fragmentWeight = calculateWeight fragment
 
-possibleMatches weight fragments = [ humanReadable fragment | fragment <- fragments,
+possibleMatches weight fragments = [ fragment | fragment <- fragments,
                                      weightWithinTolerance weight fragment ]
+
 humanReadable fragment = [toUpper x | x <- intercalate "" fragment]
 
 main = do
   -- print "Enter your sequence:"
   -- sequence <- getLine
-  print $ possibleMatches foundWeight (possibleFragments $ parsePeptide sequence)
+  print zipped
   where sequence = "V(3D)NK(3F)NKEXCNZRAIEUALDPNLNDQQFHUKIWZIIXDC"
         foundWeight = 1990.8
+        pf = possibleFragments $ parsePeptide sequence
+        pm = possibleMatches foundWeight pf
+        humanPM = map humanReadable pm
+        pw = map calculateWeight pm
+        zipped = zip humanPM pw
 
