@@ -3,6 +3,7 @@ module Peptide (calculationResults) where
 import Text.RegexPR
 import Data.Char
 import Data.List
+import qualified Data.ByteString.Char8 as C8
 
 aminoAcidWeight :: [Char] -> Float
 aminoAcidWeight "a"    = 71.04
@@ -47,15 +48,15 @@ aminoAcidWeight "(3y)" = 117.08
 aminoAcidWeight "x"    = 111.07
 aminoAcidWeight "z"    = 112.06
 aminoAcidWeight "u"    = 85.05
-aminoAcidWeight x      = 0.0
+aminoAcidWeight _      = 0.0
 
 lowerString :: [Char] -> [Char]
 lowerString string = [ toLower x | x <- string ]
 
-parsePeptide :: [Char] -> [[Char]]
+parsePeptide :: C8.ByteString -> [[Char]]
 parsePeptide peptideSequence = [ match | ((match,_),_) <- regexSequence ]
                         where regexSequence = gmatchRegexPR "\\([0-9][a-z]\\)|[a-z]" lowerSequence
-                              lowerSequence = lowerString peptideSequence
+                              lowerSequence = lowerString (C8.unpack peptideSequence)
 
 calculateWeight :: [[Char]] -> Float
 calculateWeight peptideSequence = 19 + sum aminoAcids
@@ -82,7 +83,7 @@ possibleMatches weight fragments = [ fragment | fragment <- fragments,
 humanReadable :: [[Char]] -> [Char]
 humanReadable fragment = [toUpper x | x <- intercalate "" fragment]
 
-calculationResults :: Float -> [Char] -> [([Char], Float)]
+calculationResults :: Float -> C8.ByteString -> [([Char], Float)]
 calculationResults weight peptideSequence = results
   where pf = possibleFragments $ parsePeptide peptideSequence
         pm = possibleMatches weight pf
