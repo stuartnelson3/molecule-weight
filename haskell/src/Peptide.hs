@@ -53,14 +53,25 @@ aminoAcidWeight _      = 0.0
 lowerString :: [Char] -> [Char]
 lowerString string = [ toLower x | x <- string ]
 
-parsePeptide :: C8.ByteString -> [[Char]]
+parsePeptide :: [Char] -> [[Char]]
 parsePeptide peptideSequence = [ match | ((match,_),_) <- regexSequence ]
                         where regexSequence = gmatchRegexPR "\\([0-9][a-z]\\)|[a-z]" lowerSequence
-                              lowerSequence = lowerString (C8.unpack peptideSequence)
+                              lowerSequence = lowerString peptideSequence
 
-calculateWeight :: [[Char]] -> Float
-calculateWeight peptideSequence = 19 + sum aminoAcids
-                           where aminoAcids = [ aminoAcidWeight x | x <- peptideSequence ]
+calculateWeight :: [[Char]] -> [[Char]] -> Float
+calculateWeight fragment peptide = weightAdjustment + sum aminoAcids
+                           where aminoAcids = [ aminoAcidWeight x | x <- fragment ]
+                                 weightAdjustment = calculateWeightAdjustment fragment peptide
+
+calculateWeightAdjustment :: [[Char]] -> [[Char]] -> Float
+calculateWeightAdjustment fragment peptide
+-- e.g. frag = [a,b,c]; pep = [j,f,e,w,a,b,c]
+-- take 3 [c,b,a,w,e,f,j] -> [c,b,a]
+-- reverse [c,b,a] -> [a,b,c]
+-- [a,b,c] == [a,b,c]
+  | fragment == peptide                                              = 18
+  | fragment == (reverse $ take (length fragment) (reverse peptide)) = 18
+  | otherwise                                                        = 19
 
 possibleFragments :: [[Char]] -> [[[Char]]]
 possibleFragments peptideSequence = concat [ fragmentsByLength x peptideSequence | x <- [1..length peptideSequence] ]
@@ -72,21 +83,22 @@ fragmentsByLength len (x:xs)
   | length (x:xs) >= len = (take len (x:xs)):(fragmentsByLength len xs)
   | otherwise            = []
 
-weightWithinTolerance :: Float -> [[Char]] -> Bool
-weightWithinTolerance weight fragment = fragmentWeight + 5 > weight && fragmentWeight - 5 < weight
-                                        where fragmentWeight = calculateWeight fragment
+weightWithinTolerance :: Float -> [[Char]] -> [[Char]] -> Bool
+weightWithinTolerance weight fragment peptide = fragmentWeight + 5 > weight && fragmentWeight - 5 < weight
+                                                where fragmentWeight = calculateWeight fragment peptide
 
-possibleMatches :: Float -> [[[Char]]] -> [[[Char]]]
-possibleMatches weight fragments = [ fragment | fragment <- fragments,
-                                     weightWithinTolerance weight fragment ]
+possibleMatches :: Float -> [[[Char]]] -> [[Char]] -> [[[Char]]]
+possibleMatches weight fragments peptide = [ fragment | fragment <- fragments,
+                                             weightWithinTolerance weight fragment peptide ]
 
 humanReadable :: [[Char]] -> [Char]
 humanReadable fragment = [toUpper x | x <- intercalate "" fragment]
 
 calculationResults :: Float -> C8.ByteString -> [([Char], Float)]
 calculationResults weight peptideSequence = results
-  where pf = possibleFragments $ parsePeptide peptideSequence
-        pm = possibleMatches weight pf
-        humanPM = map humanReadable pm
-        pw = map calculateWeight pm
-        results = zip humanPM pw
+  where parsedSeq = parsePeptide $ C8.unpack peptideSequence
+        pfs = possibleFragments parsedSeq
+        pms = possibleMatches weight pfs parsedSeq
+        humanPM = map humanReadable pms
+        possibleWeights = [ calculateWeight pm parsedSeq | pm <- pms ]
+        results = zip humanPM possibleWeights
