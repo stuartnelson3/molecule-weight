@@ -10,7 +10,7 @@ body {
 }
 
 .wrapper {
-  max-width: 960px;
+  max-width: 1024px;
   width: 96%;
   margin: auto;
 }
@@ -34,7 +34,14 @@ header {
 }
 
 .main {
+  float: left;
   text-align: center;
+}
+
+.instructions {
+  font-size: 20px;
+  text-align: left;
+  margin: 0 0 30px 0;
 }
 
 .find-weight label, .find-sequence label {
@@ -75,10 +82,25 @@ button:focus {
 }
 
 .peptide-weight {
+  float: right;
+  width: 34%;
   font-size: 24px;
   text-align: center;
 }
 
+.result {
+  width: 34%;
+  float: right;
+}
 
+.sequence-result {
+  width: 200px;
+}
+
+.superscript {
+  font-size: 16px;
+  position: relative;
+  bottom: 9px;
+}
 
 

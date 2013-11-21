@@ -19,7 +19,7 @@ function postData(e) {
       data = JSON.parse(data)
       var seq_objs = data['possible_sequences'];
 
-      $(".peptide-weight").empty().append("<p>Peptide weight is "+data['weight']+"</p>");
+      $(".peptide-weight").empty().append("<p>Expected [M+H]<span class='superscript'>+</span> is "+data['weight']+"</p>");
       if (typeof seq_objs === "string") {
         $(".result table").append("<tr><td class='error'>"+seq_objs+"</td></tr>")
         return
