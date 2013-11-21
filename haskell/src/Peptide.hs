@@ -85,10 +85,10 @@ possibleMatches :: Float -> [[String]] -> [String] -> [[String]]
 possibleMatches weight fragments peptide = [ fragment | fragment <- fragments,
                                              weightWithinTolerance weight fragment peptide ]
 
-humanReadable :: [[Char]] -> [Char]
+humanReadable :: [String] -> String
 humanReadable fragment = map toUpper (intercalate "" fragment)
 
-calculationResults :: Float -> C8.ByteString -> [([Char], Float)]
+calculationResults :: Float -> C8.ByteString -> [(String, Float)]
 calculationResults weight peptideSequence = results
   where parsedSeq = parsePeptide $ C8.unpack peptideSequence
         pfs = possibleFragments parsedSeq
