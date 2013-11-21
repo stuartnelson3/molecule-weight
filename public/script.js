@@ -5,10 +5,24 @@ $(document).on("keypress", function(e) {
   }
 });
 
+function weightSimilarity(enteredWeight, weight) {
+  var absoluteDiff = Math.abs(enteredWeight - weight);
+  if (absoluteDiff <= 1.5){
+    return "green"
+  }
+  else if (absoluteDiff <= 3){
+    return "yellow"
+  }
+  else {
+    return "red"
+  }
+}
+
 function postData(e) {
+  var enteredWeight = parseFloat($("input[name=weight]").val());
   var data = {
     peptide_sequence: $("input[name=peptide_sequence]").val(),
-    weight: parseFloat($("input[name=weight]").val())
+    weight: enteredWeight
   };
 
   var params = {
@@ -29,7 +43,9 @@ function postData(e) {
       for (var i = 0; i < sequences.length; i++) {
         var sequence = sequences[i]
         var weight = seq_objs[sequence]
-        $(".result table").append("<tr><td>"+sequence+"</td><td>"+weight+"</td></tr>")
+        $(".result table").
+          append("<tr class="+weightSimilarity(enteredWeight, weight)+">\
+                   <td>"+sequence+"</td><td>"+weight+"</td></tr>")
       }
     }
   }
