@@ -45,7 +45,7 @@ function postData(e) {
         var weight = seq_objs[sequence]
         $(".result table").
           append("<tr class="+weightSimilarity(enteredWeight, weight)+">\
-                   <td>"+sequence+"</td><td>"+weight+"</td></tr>")
+                   <td class='found-sequence'>"+sequence+"</td><td>"+weight+"</td></tr>")
       }
     }
   }

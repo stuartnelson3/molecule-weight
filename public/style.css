@@ -144,3 +144,6 @@ table td{
   border-radius: 3px;
 }
 
+.found-sequence, .error {
+  min-width: 347px;
+}
