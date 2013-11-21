@@ -48,8 +48,10 @@ function postData(e) {
       for (var i = 0; i < sequences.length; i++) {
         var sequence = sequences[i];
         var weight = seq_objs[sequence];
+        var regex = /no matches found/i;
+        var color = (regex.test(sequence) && 'red') || weightSimilarity(enteredWeight, weight);
         $(".result table").
-          append("<tr class="+weightSimilarity(enteredWeight, weight)+">\
+          append("<tr class="+color+">\
                    <td class='found-sequence'>"+sequence+"</td><td>"+weight+"</td></tr>");
       }
     }
