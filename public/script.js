@@ -7,16 +7,16 @@ $(document).on("keypress", function(e) {
 
 function weightSimilarity(enteredWeight, weight) {
   var absoluteDiff = Math.abs(enteredWeight - weight);
-  if (absoluteDiff <= 1.5){
+  if (absoluteDiff <= 1.5) {
     return "green"
   }
-  else if (absoluteDiff <= 3){
+  else if (absoluteDiff <= 3) {
     return "yellow"
   }
   else {
     return "red"
   }
-}
+};
 
 function postData(e) {
   var enteredWeight = parseFloat($("input[name=weight]").val());

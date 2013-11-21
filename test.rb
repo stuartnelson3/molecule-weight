@@ -53,7 +53,7 @@ describe Peptide do
 
   it "notifies the user if there were no matches" do
     weight = 43532523354235
-    expect(subject.possible_sequences(weight)).to eq("No matches found for #{weight}")
+    expect(subject.possible_sequences(weight)).to eq({ "No matches found" => weight })
   end
 
   context "end and non-end fragments" do
