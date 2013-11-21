@@ -50,17 +50,14 @@ aminoAcidWeight "z"    = 112.06
 aminoAcidWeight "u"    = 85.05
 aminoAcidWeight _      = 0.0
 
-lowerString :: [Char] -> [Char]
-lowerString string = [ toLower x | x <- string ]
-
 parsePeptide :: [Char] -> [[Char]]
 parsePeptide peptideSequence = [ match | ((match,_),_) <- regexSequence ]
                         where regexSequence = gmatchRegexPR "\\([0-9][a-z]\\)|[a-z]" lowerSequence
-                              lowerSequence = lowerString peptideSequence
+                              lowerSequence = map toLower peptideSequence
 
 calculateWeight :: [[Char]] -> [[Char]] -> Float
 calculateWeight fragment peptide = weightAdjustment + sum aminoAcids
-                           where aminoAcids = [ aminoAcidWeight x | x <- fragment ]
+                           where aminoAcids = map aminoAcidWeight fragment
                                  weightAdjustment = calculateWeightAdjustment fragment peptide
 
 calculateWeightAdjustment :: [[Char]] -> [[Char]] -> Float
