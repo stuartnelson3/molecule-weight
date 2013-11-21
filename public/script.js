@@ -5,10 +5,24 @@ $(document).on("keypress", function(e) {
   }
 });
 
+function weightSimilarity(enteredWeight, weight) {
+  var absoluteDiff = Math.abs(enteredWeight - weight);
+  if (absoluteDiff <= 1.5){
+    return "green"
+  }
+  else if (absoluteDiff <= 3){
+    return "yellow"
+  }
+  else {
+    return "red"
+  }
+}
+
 function postData(e) {
+  var enteredWeight = parseFloat($("input[name=weight]").val());
   var data = {
     peptide_sequence: $("input[name=peptide_sequence]").val(),
-    weight: parseFloat($("input[name=weight]").val())
+    weight: enteredWeight
   };
 
   var params = {
@@ -19,7 +33,7 @@ function postData(e) {
       data = JSON.parse(data);
       var seq_objs = data['possible_sequences'];
 
-      $(".peptide-weight").empty().append("<p>Peptide weight is "+data['weight']+"</p>");
+      $(".peptide-weight").empty().append("<p>Expected [M+H]<span class='superscript'>+</span> is "+data['weight']+"</p>");
       if (typeof seq_objs === "string") {
         $(".result table").append("<tr><td class='error'>"+seq_objs+"</td></tr>");
         return;
@@ -29,7 +43,9 @@ function postData(e) {
       for (var i = 0; i < sequences.length; i++) {
         var sequence = sequences[i];
         var weight = seq_objs[sequence];
-        $(".result table").append("<tr><td>"+sequence+"</td><td>"+weight+"</td></tr>");
+        $(".result table").
+          append("<tr class="+weightSimilarity(enteredWeight, weight)+">\
+                   <td class='found-sequence'>"+sequence+"</td><td>"+weight+"</td></tr>");
       }
     }
   }

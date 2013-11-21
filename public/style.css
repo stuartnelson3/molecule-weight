@@ -7,10 +7,15 @@ body {
   background: white;
   color: #ff0000;
   line-height: 1.5;
+  font-weight: 200;
+}
+
+h1, h2, h3, h4, h5, h6, p, button, input {
+  font-weight: 200;
 }
 
 .wrapper {
-  max-width: 960px;
+  max-width: 1024px;
   width: 96%;
   margin: auto;
 }
@@ -34,13 +39,33 @@ header {
 }
 
 .main {
+  float: left;
   text-align: center;
+}
+
+.instructions {
+  font-size: 20px;
+  text-align: left;
+  margin: 0 0 30px 0;
 }
 
 .find-weight label, .find-sequence label {
   display: block;
   margin-bottom: 5px;
   font-size: 22px;
+}
+
+input::-webkit-input-placeholder { /* WebKit browsers */
+    color: rgba(0, 0, 0, .2);
+}
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: rgba(0, 0, 0, .2);
+}
+input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: rgba(0, 0, 0, .2);
+}
+input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: rgba(0, 0, 0, .2);
 }
 
 input, button {
@@ -51,7 +76,7 @@ input, button {
   padding: 8px;
   text-align: center;
   margin-bottom: 15px;
-  width: 660px;
+  width: 450px;
   border: 2px solid #ff0000;
 }
 
@@ -75,10 +100,55 @@ button:focus {
 }
 
 .peptide-weight {
+  float: right;
+  width: 42%;
   font-size: 24px;
   text-align: center;
+  background: #ff0000;
+  color: white;
+  border-radius: 3px;
+  position: relative;
+  right: 10px;
+}
+.peptide-weight p {
+  margin: 0;
+  padding: 10px 11px 10px 10px;
+
 }
 
+.result {
+  float: right;
+}
 
+.sequence-result {
+  width: 200px;
+}
 
+.superscript {
+  font-size: 16px;
+  position: relative;
+  bottom: 9px;
+}
 
+.green {
+  color: #27ae60;
+}
+
+.yellow {
+  color: #f1c40f;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 10px;
+}
+
+table td{
+  padding: 10px;
+  border: 2px solid;
+  margin: 0 0 5px 0;
+  border-radius: 3px;
+}
+
+.found-sequence, .error {
+  min-width: 347px;
+}
