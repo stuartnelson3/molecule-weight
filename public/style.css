@@ -7,6 +7,11 @@ body {
   background: white;
   color: #ff0000;
   line-height: 1.5;
+  font-weight: 200;
+}
+
+h1, h2, h3, h4, h5, h6, p, button, table td {
+  font-weight: 200;
 }
 
 .wrapper {
