@@ -7,7 +7,6 @@ import           Snap.Util.FileServe
 import           Snap.Http.Server
 import           Snap.Extras.JSON
 import           Peptide
-import           Data.Maybe
 import qualified Data.ByteString.Char8 as C8
 
 main :: IO ()
@@ -23,11 +22,9 @@ site =
 
 possibleMatches :: Snap ()
 possibleMatches = do
-  peptideSequence <- getParam "peptide_sequence"
-  foundWeight     <- getParam "weight"
-  let results = calculationResults (read . C8.unpack $ (fromJust foundWeight)) (fromJust peptideSequence)
-  maybe (writeBS "must specify params in URL")
-         writeJSON $ Just (results)
+  Just peptideSequence <- getParam "peptide_sequence"
+  Just foundWeight     <- getParam "weight"
+  writeJSON $ calculationResults (read $ C8.unpack foundWeight) peptideSequence
 
 echoHandler :: Snap ()
 echoHandler = do
