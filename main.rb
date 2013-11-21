@@ -60,7 +60,48 @@ class Peptide
   def initialize molecules
     @molecules = UserInput.parse molecules
     @weight = calculate_weight @molecules, :original
-    @combinations = find_combinations @molecules
+    @combinations = MoleculeCombinations.find_for @molecules
+  end
+
+  def calculate_weight molecules, original = false
+    FragmentWeight.new(@molecules).calculate molecules, original
+  end
+
+  def combination_in_range combo, weight
+    (calculate_weight(combo) - weight).abs <= 5
+  end
+
+  def possible_sequences weight
+    matches = combinations.select {|combo|
+      combination_in_range combo, weight
+    }
+    weights = matches.map {|m| calculate_weight(m) }
+    matches.map!(&:join).map!(&:upcase) # ['a','b'] => 'AB'
+    if h = Hash[matches.zip weights] and !h.empty?
+      h # { "SEQUENCE" => weight }
+    else
+      "No matches found for #{weight}"
+    end
+  end
+end
+
+class MoleculeCombinations
+  def self.find_for molecules
+    a = []
+    (1..molecules.length).to_a.each {|i| a+=molecules.each_cons(i).to_a }
+    a
+  end
+end
+
+class FragmentWeight
+  def initialize molecules
+    @molecules = molecules
+  end
+
+  def calculate molecules, original = false
+    weight_adjustment = calculate_adjustment molecules, original
+    weights = molecules.map {|m| AMINOACIDS[m] }
+    weights.inject(&:+).round(1) + weight_adjustment
   end
 
   def calculate_adjustment molecules, original
@@ -73,31 +114,5 @@ class Peptide
 
   def end_of_fragment? molecules
     @molecules[-molecules.length, molecules.length] == molecules
-  end
-
-  def calculate_weight molecules, original = false
-    weight_adjustment = calculate_adjustment molecules, original
-    weights = molecules.map {|m| AMINOACIDS[m] }
-    weights.compact.inject(&:+).round(1) + weight_adjustment
-  end
-
-  def find_combinations molecules
-    a = []
-    (1..molecules.length).to_a.each {|i| a+=molecules.each_cons(i).to_a }
-    a
-  end
-
-  def possible_sequences weight
-    matches = combinations.select {|combo|
-      calculate_weight(combo)+5 > weight &&
-        calculate_weight(combo)-5 < weight
-    }
-    weights = matches.map {|m| calculate_weight(m) }
-    matches.map!(&:join).map!(&:upcase) # ['a','b'] => 'AB'
-    if h = Hash[matches.zip weights] and !h.empty?
-      h # { "SEQUENCE" => weight }
-    else
-      "No matches found for #{weight}"
-    end
   end
 end

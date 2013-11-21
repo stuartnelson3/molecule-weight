@@ -30,22 +30,22 @@ function postData(e) {
     data: data,
     url: '/possible-matches',
     success: function(data) {
-      data = JSON.parse(data)
+      data = JSON.parse(data);
       var seq_objs = data['possible_sequences'];
 
       $(".peptide-weight").empty().append("<p>Expected [M+H]<span class='superscript'>+</span> is "+data['weight']+"</p>");
       if (typeof seq_objs === "string") {
-        $(".result table").append("<tr><td class='error'>"+seq_objs+"</td></tr>")
-        return
+        $(".result table").append("<tr><td class='error'>"+seq_objs+"</td></tr>");
+        return;
       }
 
       var sequences = Object.keys(seq_objs);
       for (var i = 0; i < sequences.length; i++) {
-        var sequence = sequences[i]
-        var weight = seq_objs[sequence]
+        var sequence = sequences[i];
+        var weight = seq_objs[sequence];
         $(".result table").
           append("<tr class="+weightSimilarity(enteredWeight, weight)+">\
-                   <td class='found-sequence'>"+sequence+"</td><td>"+weight+"</td></tr>")
+                   <td class='found-sequence'>"+sequence+"</td><td>"+weight+"</td></tr>");
       }
     }
   }

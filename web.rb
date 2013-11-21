@@ -13,5 +13,7 @@ post '/possible-matches' do
     { 'weight' => p.weight, 'possible_sequences' => possible_sequences }.to_json
   rescue BadSequenceError => e
     { 'possible_sequences' => e.message }.to_json
+  rescue => e
+    { 'possible_sequences' => e.message }.to_json
   end
 end
