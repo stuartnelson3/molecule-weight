@@ -50,6 +50,19 @@ header {
   font-size: 22px;
 }
 
+input::-webkit-input-placeholder { /* WebKit browsers */
+    color: rgba(0, 0, 0, .2);
+}
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: rgba(0, 0, 0, .2);
+}
+input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: rgba(0, 0, 0, .2);
+}
+input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: rgba(0, 0, 0, .2);
+}
+
 input, button {
   background: white;
   font-size: 22px;
