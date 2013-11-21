@@ -68,7 +68,7 @@ class Peptide
   end
 
   def combination_in_range combo, weight
-    (calculate_weight(combo)-5..calculate_weight(combo)+5).cover? weight
+    (calculate_weight(combo) - weight).abs <= 5
   end
 
   def possible_sequences weight

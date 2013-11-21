@@ -65,10 +65,6 @@ calculateWeight fragment peptide = weightAdjustment + sum aminoAcids
 
 calculateWeightAdjustment :: [[Char]] -> [[Char]] -> Float
 calculateWeightAdjustment fragment peptide
--- e.g. frag = [a,b,c]; pep = [j,f,e,w,a,b,c]
--- take 3 [c,b,a,w,e,f,j] -> [c,b,a]
--- reverse [c,b,a] -> [a,b,c]
--- [a,b,c] == [a,b,c]
   | fragment == peptide                                              = 18
   | fragment == (reverse $ take (length fragment) (reverse peptide)) = 18
   | otherwise                                                        = 19
@@ -84,7 +80,7 @@ fragmentsByLength len (x:xs)
   | otherwise            = []
 
 weightWithinTolerance :: Float -> [[Char]] -> [[Char]] -> Bool
-weightWithinTolerance weight fragment peptide = fragmentWeight + 5 > weight && fragmentWeight - 5 < weight
+weightWithinTolerance weight fragment peptide = abs (fragmentWeight - weight) <= 5
                                                 where fragmentWeight = calculateWeight fragment peptide
 
 possibleMatches :: Float -> [[[Char]]] -> [[Char]] -> [[[Char]]]
