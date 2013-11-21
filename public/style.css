@@ -18,6 +18,7 @@ h1, h2, h3, h4, h5, h6, p, button, input {
   max-width: 1024px;
   width: 96%;
   margin: auto;
+  overflow: auto;
 }
 
 header {
@@ -85,7 +86,7 @@ input:focus {
 }
 
 button {
-  width: 300px;
+  width: 223px;
   margin: 10px 0 0 0;
   margin-bottom: 15px;
 }
@@ -151,4 +152,8 @@ table td{
 
 .found-sequence, .error {
   min-width: 347px;
+}
+
+footer {
+  height: 200px;
 }

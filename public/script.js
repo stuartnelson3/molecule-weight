@@ -1,4 +1,4 @@
-$(document).on("click", "button", postData);
+$(document).on("click", ".search", postData);
 $(document).on("keypress", function(e) {
   if (e.keyCode === 13) {
     postData();
@@ -17,6 +17,11 @@ function weightSimilarity(enteredWeight, weight) {
     return "red"
   }
 };
+
+$(document).on("click", ".clear-results", function() {
+  $(".red,.yellow,.green, .error").remove();
+  $(".peptide-weight").empty();
+});
 
 function postData(e) {
   var enteredWeight = parseFloat($("input[name=weight]").val());
