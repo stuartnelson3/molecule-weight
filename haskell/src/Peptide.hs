@@ -36,6 +36,7 @@ aminoAcidWeight "(3h)" = 151.08
 aminoAcidWeight "(3i)" = 127.1
 aminoAcidWeight "(3k)" = 142.11
 aminoAcidWeight "(3l)" = 127.1
+aminoAcidWeight "(3m)" = 145.06
 aminoAcidWeight "(3n)" = 128.06
 aminoAcidWeight "(3p)" = 111.07
 aminoAcidWeight "(3q)" = 142.07
