@@ -70,7 +70,7 @@ describe Peptide do
 
   context "AMINOACIDS" do
     it "should raise on a bad key" do
-      expect { AMINOACIDS['NOMATCH'] }.to raise_error BadSequenceError
+      expect { AminoAcids.new.residues['NOMATCH'] }.to raise_error BadSequenceError
     end
   end
 
@@ -97,6 +97,15 @@ describe Peptide do
       expect(with_wildcards.weight).to eq(
         Peptide.new("XZU").weight + wildcards.values.map(&:to_f).inject(&:+)
       )
+    end
+
+    it "should not add residues that have 0 for a value" do
+      wildcards = {
+        "(1X)" => "100.5",
+        "(2X)" => "110.3",
+        "(3X)" => ""
+      }
+      expect { Peptide.new("XZU(1X)(2X)(3X)", wildcards) }.to raise_error BadSequenceError
     end
   end
 end
