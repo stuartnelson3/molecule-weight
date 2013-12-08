@@ -58,10 +58,17 @@ end
 
 class Peptide
   attr_reader :molecules, :weight, :combinations
-  def initialize molecules
+  def initialize molecules, wildcards = {}
+    add_wildcards wildcards
     @molecules = UserInput.parse molecules
     @weight = calculate_weight @molecules, :original
     @combinations = MoleculeCombinations.find_for @molecules
+  end
+
+  def add_wildcards wildcards
+    wildcards.each do |k,v|
+      AMINOACIDS[k] = v
+    end
   end
 
   def calculate_weight molecules, original = false

@@ -73,4 +73,18 @@ describe Peptide do
       expect { AMINOACIDS['NOMATCH'] }.to raise_error BadSequenceError
     end
   end
+
+  context "wildcards" do
+    it "should calculate correctly if a wildcard has been added" do
+      wildcards = {
+        "(1x)" => 100,
+        "(2x)" => 110,
+        "(3x)" => 120
+      }
+      with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", wildcards)
+      expect(with_wildcards.weight).to eq(
+        Peptide.new("XZU").weight + wildcards.values.inject(&:+)
+      )
+    end
+  end
 end
