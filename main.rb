@@ -67,7 +67,7 @@ class Peptide
 
   def add_wildcards wildcards
     wildcards.each do |k,v|
-      AMINOACIDS[k] = v
+      AMINOACIDS[k.downcase] = v.to_f
     end
   end
 

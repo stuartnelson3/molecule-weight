@@ -50,6 +50,14 @@ header {
   margin: 0 0 30px 15px;
 }
 
+.wildcards input {
+  width: 125px;
+}
+
+.wildcards label {
+  margin-right: 20px;
+}
+
 .find-weight label, .find-sequence label {
   display: block;
   margin-bottom: 5px;

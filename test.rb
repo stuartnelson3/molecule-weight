@@ -77,13 +77,25 @@ describe Peptide do
   context "wildcards" do
     it "should calculate correctly if a wildcard has been added" do
       wildcards = {
-        "(1x)" => 100,
-        "(2x)" => 110,
-        "(3x)" => 120
+        "(1X)" => 100.5,
+        "(2X)" => 110.3,
+        "(3X)" => 120.7
       }
       with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", wildcards)
       expect(with_wildcards.weight).to eq(
         Peptide.new("XZU").weight + wildcards.values.inject(&:+)
+      )
+    end
+
+    it "should calculate correctly if weights are strings" do
+      wildcards = {
+        "(1X)" => "100.5",
+        "(2X)" => "110.3",
+        "(3X)" => "120.7"
+      }
+      with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", wildcards)
+      expect(with_wildcards.weight).to eq(
+        Peptide.new("XZU").weight + wildcards.values.map(&:to_f).inject(&:+)
       )
     end
   end

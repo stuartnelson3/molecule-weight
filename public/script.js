@@ -25,9 +25,15 @@ $(document).on("click", ".clear-results", function() {
 
 function postData(e) {
   var enteredWeight = parseFloat($("input[name=weight]").val());
+  var wildcards = {
+    "(1X)": $("input[name='(1X)']").val(),
+    "(2X)": $("input[name='(2X)']").val(),
+    "(3X)": $("input[name='(3X)']").val(),
+  }
   var data = {
     peptide_sequence: $("input[name=peptide_sequence]").val(),
-    weight: enteredWeight
+    weight:           enteredWeight,
+    wildcards:        wildcards
   };
 
   var params = {
