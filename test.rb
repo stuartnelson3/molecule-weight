@@ -17,6 +17,10 @@ describe UserInput do
     expect(parser.parse("A (3L) (3T) X Z")).to eq(expected_parsed_data)
   end
 
+  it "parses reversed paren residues" do
+    expect(parser.parse("A(L3)X(Z)")).to eq(%w(a (l3) x (z)))
+  end
+
 end
 
 describe Peptide do
