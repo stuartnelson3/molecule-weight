@@ -47,9 +47,16 @@ describe Peptide do
   end
 
   context "Acetylated peptides" do
+    let(:subject)  { Peptide.new("Ac-AEF(3A)YXZ") }
+    let(:residues) { AminoAcids.new.residues }
 
     it "correctly parses out acetylated petides" do
-      expect(Peptide.new("Ac-AEF(3A)YXZ").molecules).to include("ac-")
+      expect(subject.molecules).to include("ac-")
+    end
+
+    it "correctly formats results that include Ac-" do
+      weight = residues['ac-'] + residues['a'] + 19
+      expect(subject.possible_sequences(weight).keys).to include("Ac-A")
     end
 
     context NonTerminalAcetylateError do

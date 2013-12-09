@@ -107,7 +107,7 @@ class Peptide
       combination_in_range combo, weight
     }
     weights = matches.map {|m| calculate_weight(m) }
-    matches.map!(&:join).map!(&:upcase) # ['a','b'] => 'AB'
+    matches.map!(&:join).map! {|seq| seq.upcase.gsub(/AC-/,"Ac-") }
     if h = Hash[matches.zip weights] and !h.empty?
       h # { "SEQUENCE" => weight }
     else
