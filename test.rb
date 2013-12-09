@@ -46,6 +46,19 @@ describe Peptide do
     )
   end
 
+  context "Acetylated peptides" do
+
+    it "correctly parses out acetylated petides" do
+      expect(Peptide.new("Ac-AEF(3A)YXZ").combinations).to include(["ac-"])
+    end
+
+    context NonTerminalAcetylateError do
+      it "blows up on non-left-hand Ac- residue" do
+        expect { Peptide.new("AEF(3A)YAc-XZ") }.to raise_error NonTerminalAcetylateError
+      end
+    end
+  end
+
   it "knows the weight of a combination" do
     expect(Peptide.new("XZU").weight).to eq(308.2 + 18)
   end

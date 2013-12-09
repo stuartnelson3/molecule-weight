@@ -1,4 +1,5 @@
 class BadSequenceError < StandardError; end
+class NonTerminalAcetylateError < StandardError; end
 
 class AminoAcids
   attr_reader :residues
@@ -8,6 +9,7 @@ class AminoAcids
     }
 
     {
+      'ac-'  => 42.06,
       'a'    => 71.04,
       'c'    => 103.01,
       'd'    => 115.03,
@@ -57,7 +59,7 @@ end
 
 class UserInput
   def self.parse input
-    input.downcase.strip.scan(/\([0-9]?[a-z]\)|[a-z]|\([a-z][0-9]\)/)
+    input.downcase.strip.scan(/ac-|\([0-9]?[a-z]\)|[a-z]|\([a-z][0-9]\)/)
   end
 end
 
@@ -66,9 +68,17 @@ class Peptide
   def initialize molecules, wildcards = {}
     @residues = AminoAcids.new.residues
     add_wildcards wildcards
-    @molecules = UserInput.parse molecules
+    @molecules = parse_molecules molecules
     @weight = calculate_weight @molecules, :original
     @combinations = MoleculeCombinations.find_for @molecules
+  end
+
+  def parse_molecules molecules
+    parsed_molecules = UserInput.parse molecules
+    if parsed_molecules.include?("ac-") && parsed_molecules.first != "ac-"
+      raise NonTerminalAcetylateError, "Error: Terminal acetylate in a non-terminal position."
+    end
+    parsed_molecules
   end
 
   def add_wildcards wildcards
