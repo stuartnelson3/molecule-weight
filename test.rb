@@ -49,7 +49,7 @@ describe Peptide do
   context "Acetylated peptides" do
 
     it "correctly parses out acetylated petides" do
-      expect(Peptide.new("Ac-AEF(3A)YXZ").combinations).to include(["ac-"])
+      expect(Peptide.new("Ac-AEF(3A)YXZ").molecules).to include("ac-")
     end
 
     context NonTerminalAcetylateError do
