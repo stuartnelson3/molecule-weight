@@ -75,10 +75,15 @@ class Peptide
 
   def parse_molecules molecules
     parsed_molecules = UserInput.parse molecules
-    if parsed_molecules.include?("ac-") && parsed_molecules.first != "ac-"
+    if non_terminal_acetylate? parsed_molecules
       raise NonTerminalAcetylateError, "Error: Acetylation in a non-terminal position."
     end
     parsed_molecules
+  end
+
+  def non_terminal_acetylate? parsed_molecules
+    parsed_molecules.include?("ac-") &&
+      (parsed_molecules.first != "ac-" || parsed_molecules.select {|pm| pm == "ac-" }.count > 1)
   end
 
   def add_wildcards wildcards

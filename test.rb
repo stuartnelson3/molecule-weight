@@ -63,6 +63,10 @@ describe Peptide do
       it "blows up on non-left-hand Ac- residue" do
         expect { Peptide.new("AEF(3A)YAc-XZ") }.to raise_error NonTerminalAcetylateError
       end
+
+      it "doesn't let you pass in multiple Ac- groups" do
+        expect { Peptide.new("Ac-AEFAc-") }.to raise_error NonTerminalAcetylateError
+      end
     end
   end
 
