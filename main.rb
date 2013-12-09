@@ -76,7 +76,7 @@ class Peptide
   def parse_molecules molecules
     parsed_molecules = UserInput.parse molecules
     if parsed_molecules.include?("ac-") && parsed_molecules.first != "ac-"
-      raise NonTerminalAcetylateError, "Error: Terminal acetylate in a non-terminal position."
+      raise NonTerminalAcetylateError, "Error: Acetylation in a non-terminal position."
     end
     parsed_molecules
   end
