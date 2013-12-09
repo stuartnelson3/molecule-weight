@@ -73,8 +73,14 @@ class Peptide
 
   def add_wildcards wildcards
     wildcards.each do |k,v|
-      v = v.to_f
-      @residues[k.downcase] = v unless v.zero?
+      begin
+        # will raise error if residue doesn't exist, in which case then we can
+        # assign it
+        @residues[k.downcase]
+      rescue BadSequenceError
+        v = v.to_f
+        @residues[k.downcase] = v unless v.zero?
+      end
     end
   end
 

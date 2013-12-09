@@ -107,5 +107,11 @@ describe Peptide do
       }
       expect { Peptide.new("XZU(1X)(2X)(3X)", wildcards) }.to raise_error BadSequenceError
     end
+
+    it "should not overwrite existing residue weights" do
+      wildcard = { "A" => 10 }
+      original_weight = Peptide.new("A").weight
+      expect(Peptide.new("A", wildcard).weight).to eq(original_weight)
+    end
   end
 end
