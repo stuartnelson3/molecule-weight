@@ -83,17 +83,13 @@ class Peptide
 
   def non_terminal_acetylate? parsed_molecules
     parsed_molecules.include?("ac-") &&
-      (parsed_molecules.first != "ac-" || parsed_molecules.select {|pm| pm == "ac-" }.count > 1)
+      (parsed_molecules.first != "ac-" ||
+       parsed_molecules.select {|pm| pm == "ac-" }.count > 1)
   end
 
   def add_wildcards wildcards
     wildcards.each do |k,v|
-      begin
-        # will raise error if residue doesn't exist, in which case then we can
-        # assign it
-        @residues[k.downcase]
-      rescue BadSequenceError
-        v = v.to_f
+      if !@residues.fetch(k.downcase) { nil } && v = v.to_f
         @residues[k.downcase] = v unless v.zero?
       end
     end
