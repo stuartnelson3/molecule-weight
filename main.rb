@@ -134,7 +134,7 @@ class FragmentWeight
   def calculate molecules, original = false
     weight_adjustment = calculate_adjustment molecules, original
     weights = molecules.map {|m| @residues[m] }
-    weights.inject(&:+).round(1) + weight_adjustment
+    weights.inject(&:+).round(2) + weight_adjustment
   end
 
   def calculate_adjustment molecules, original
