@@ -71,12 +71,12 @@ describe Peptide do
   end
 
   it "knows the weight of a combination" do
-    expect(Peptide.new("XZU").weight).to eq(308.2 + 18)
+    expect(Peptide.new("XZU").weight).to eq(308.18 + 18)
   end
 
   it "lists a sequence based on a molecular weight" do
     yxz_weight = 163.06 + 111.07 + 112.06 + 18
-    expect(subject.possible_sequences(yxz_weight)).to eq({ "YXZ" => yxz_weight.round(1) })
+    expect(subject.possible_sequences(yxz_weight)).to eq({ "YXZ" => yxz_weight.round(2) })
   end
 
   it "notifies the user if there were no matches" do
@@ -87,12 +87,12 @@ describe Peptide do
   context "end and non-end fragments" do
     it "adds 18 to end fragments" do
       expected_weight = 163.06 + 111.07 + 112.06 + 18
-      expect(subject.calculate_weight(['y','x','z'])).to eq(expected_weight.round(1))
+      expect(subject.calculate_weight(['y','x','z'])).to eq(expected_weight.round(2))
     end
 
     it "adds 19 to non-ending fragments" do
       expected_weight = 71.04 + 129.04 + 147.07 + 19
-      expect(subject.calculate_weight(['a','e','f'])).to eq(expected_weight.round(1))
+      expect(subject.calculate_weight(['a','e','f'])).to eq(expected_weight.round(2))
     end
   end
 
@@ -111,7 +111,7 @@ describe Peptide do
       }
       with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", wildcards)
       expect(with_wildcards.weight).to eq(
-        Peptide.new("XZU").weight + wildcards.values.inject(&:+)
+        (Peptide.new("XZU").weight + wildcards.values.inject(&:+)).round(2)
       )
     end
 
@@ -123,7 +123,7 @@ describe Peptide do
       }
       with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", wildcards)
       expect(with_wildcards.weight).to eq(
-        Peptide.new("XZU").weight + wildcards.values.map(&:to_f).inject(&:+)
+        (Peptide.new("XZU").weight + wildcards.values.map(&:to_f).inject(&:+)).round(2)
       )
     end
 
