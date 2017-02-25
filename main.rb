@@ -119,9 +119,7 @@ end
 
 class MoleculeCombinations
   def self.find_for molecules
-    a = []
-    (1..molecules.length).each {|i| a+=molecules.each_cons(i).to_a }
-    a
+    (1..molecules.length).flat_map {|i| molecules.each_cons(i).to_a }
   end
 end
 
