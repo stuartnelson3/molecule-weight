@@ -1,6 +1,8 @@
+require './amino_acids'
+
 class BadSequenceError < StandardError; end
 class NonTerminalAcetylateError < StandardError; end
-
+class UnrecognizedMassType < StandardError; end
 
 class MassTypes
   TYPES = {'monoisotopic' => :monoisotopic.freeze,
@@ -9,62 +11,6 @@ class MassTypes
   TYPES.default = TYPES['monoisotopic']
   def self.parse input
     TYPES[input]
-  end
-end
-
-class AminoAcids
-  attr_reader :residues
-  def initialize(mass_type)
-    @residues = Hash.new {|hash, key|
-      raise BadSequenceError, "Could not find weight for amino acid #{key.upcase}"
-    }
-
-    {
-      'ac-'  => 42.06,
-      'a'    => 71.04,
-      'c'    => 103.01,
-      'd'    => 115.03,
-      'e'    => 129.04,
-      'f'    => 147.07,
-      'g'    => 57.02,
-      'h'    => 137.06,
-      'i'    => 113.08,
-      'k'    => 128.09,
-      'l'    => 113.08,
-      'm'    => 131.04,
-      'n'    => 114.04,
-      'p'    => 97.05,
-      'q'    => 128.06,
-      'r'    => 156.1,
-      's'    => 87.03,
-      't'    => 101.05,
-      'v'    => 99.07,
-      'w'    => 186.08,
-      'y'    => 163.06,
-      '(3a)' => 85.06,
-      '(3c)' => 117.03,
-      '(3d)' => 129.05,
-      '(3e)' => 143.06,
-      '(3f)' => 161.09,
-      '(3g)' => 71.04,
-      '(3h)' => 151.08,
-      '(3i)' => 127.1,
-      '(3k)' => 142.11,
-      '(3l)' => 127.1,
-      '(3m)' => 145.06,
-      '(3n)' => 128.06,
-      '(3p)' => 111.07,
-      '(3q)' => 142.07,
-      '(3r)' => 170.12,
-      '(3s)' => 101.05,
-      '(3t)' => 115.07,
-      '(3v)' => 113.09,
-      '(3w)' => 200.1,
-      '(3y)' => 117.08,
-      'x'    => 111.07,
-      'z'    => 112.06,
-      'u'    => 85.05
-    }.each {|k,v| @residues[k] = v }
   end
 end
 
