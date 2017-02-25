@@ -143,6 +143,18 @@ class FragmentWeight
   def calculate molecules, original = false
     weight_adjustment = calculate_adjustment molecules, original
     weights = molecules.map {|m| @residues[m] }
+    # If two Cys exist subtract the 2 amu.
+    # TODO: Confirm this behavior.
+    # cysCount = 0
+    # weights = molecules.map do |m|
+    #   if m == 'c'
+    #     cysCount += 1
+    #   end
+    #   @residues[m]
+    # end
+    # if cysCount == 2
+    #   weight_adjustment -= 2
+    # end
     weights.inject(&:+).round(2) + weight_adjustment
   end
 
