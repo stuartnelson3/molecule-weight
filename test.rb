@@ -20,7 +20,23 @@ describe UserInput do
   it "parses reversed paren residues" do
     expect(parser.parse("A(L3)X(Z)")).to eq(%w(a (l3) x (z)))
   end
+end
 
+describe MassTypes do
+  let(:bad_input) { ['garbage', 123] }
+  let(:good_input) { ['monoisotopic', 'average'] }
+
+  it 'accepts good input' do
+    good_input.each do |i|
+      expect(MassTypes.parse(i)).to eq(i)
+    end
+  end
+
+  it 'cleans bad input' do
+    bad_input.each do |i|
+      expect(MassTypes.parse(i)).to eq('monoisotopic')
+    end
+  end
 end
 
 describe Peptide do

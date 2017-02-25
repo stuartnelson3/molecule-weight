@@ -8,6 +8,7 @@ end
 
 post '/possible-matches' do
   begin
+    mass_type = MassTypes.parse params[:mass_type]
     p = Peptide.new params[:peptide_sequence], params[:wildcards] || {}
     possible_sequences = p.possible_sequences params[:weight].to_f
     { 'weight' => p.weight, 'possible_sequences' => possible_sequences }.to_json

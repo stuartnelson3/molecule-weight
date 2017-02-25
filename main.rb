@@ -1,6 +1,23 @@
 class BadSequenceError < StandardError; end
 class NonTerminalAcetylateError < StandardError; end
 
+
+class MassTypes
+  TYPES = ['monoisotopic', 'average']
+
+  def self.parse input
+    if TYPES.include? input
+      input
+    else
+      default
+    end
+  end
+
+  def self.default
+    TYPES.first
+  end
+end
+
 class AminoAcids
   attr_reader :residues
   def initialize

@@ -169,3 +169,11 @@ table td{
 footer {
   height: 200px;
 }
+
+.mass-select {
+  margin-bottom: 15px;
+}
+
+.mass-select label {
+  margin-right: 80px;
+}

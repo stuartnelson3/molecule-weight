@@ -30,10 +30,14 @@ function postData(e) {
     "(2X)": $("input[name='(2X)']").val(),
     "(3X)": $("input[name='(3X)']").val(),
   }
+  var mass_type = $(".mass-select select").val();
+  var enteredSequence = $("input[name=peptide_sequence]").val();
+
   var data = {
-    peptide_sequence: $("input[name=peptide_sequence]").val(),
-    weight:           enteredWeight,
-    wildcards:        wildcards
+    peptide_sequence: enteredSequence,
+    weight: enteredWeight,
+    wildcards: wildcards
+    mass_type: mass_type,
   };
 
   var params = {
