@@ -28,19 +28,21 @@ describe MassTypes do
 
   it 'accepts good input' do
     good_input.each do |i|
-      expect(MassTypes.parse(i)).to eq(i)
+      expect(MassTypes.parse(i)).to eq(i.to_sym)
     end
   end
 
   it 'cleans bad input' do
     bad_input.each do |i|
-      expect(MassTypes.parse(i)).to eq('monoisotopic')
+      expect(MassTypes.parse(i)).to eq(:monoisotopic)
     end
   end
 end
 
 describe Peptide do
-  let(:subject) { Peptide.new("AEF(3A)YXZ") }
+  let(:mass_type) { MassTypes.parse('monoisotopic') }
+  let(:residues) { AminoAcids.new(mass_type).residues }
+  let(:subject) { Peptide.new("AEF(3A)YXZ", residues) }
 
   it "calculates the molecule weight" do
     expect(subject.weight).to be_within(0.1).of(818.39 + 18)
@@ -63,8 +65,9 @@ describe Peptide do
   end
 
   context "Acetylated peptides" do
-    let(:subject)  { Peptide.new("Ac-AEF(3A)YXZ") }
-    let(:residues) { AminoAcids.new.residues }
+    let(:mass_type) { MassTypes.parse('monoisotopic') }
+    let(:residues) { AminoAcids.new(mass_type).residues }
+    let(:subject)  { Peptide.new("Ac-AEF(3A)YXZ", residues) }
 
     it "correctly parses out acetylated petides" do
       expect(subject.molecules).to include("ac-")
@@ -77,17 +80,17 @@ describe Peptide do
 
     context NonTerminalAcetylateError do
       it "blows up on non-left-hand Ac- residue" do
-        expect { Peptide.new("AEF(3A)YAc-XZ") }.to raise_error NonTerminalAcetylateError
+        expect { Peptide.new("AEF(3A)YAc-XZ", residues) }.to raise_error NonTerminalAcetylateError
       end
 
       it "doesn't let you pass in multiple Ac- groups" do
-        expect { Peptide.new("Ac-AEFAc-") }.to raise_error NonTerminalAcetylateError
+        expect { Peptide.new("Ac-AEFAc-", residues) }.to raise_error NonTerminalAcetylateError
       end
     end
   end
 
   it "knows the weight of a combination" do
-    expect(Peptide.new("XZU").weight).to eq(308.18 + 18)
+    expect(Peptide.new("XZU", residues).weight).to eq(308.18 + 18)
   end
 
   it "lists a sequence based on a molecular weight" do
@@ -114,20 +117,25 @@ describe Peptide do
 
   context "AMINOACIDS" do
     it "should raise on a bad key" do
-      expect { AminoAcids.new.residues['NOMATCH'] }.to raise_error BadSequenceError
+      expect { AminoAcids.new(mass_type).residues['NOMATCH'] }.to raise_error BadSequenceError
     end
   end
 
   context "wildcards" do
+    let(:mass_type) { MassTypes.parse('monoisotopic') }
+    let(:residues) { AminoAcids.new(mass_type).residues }
+
+
     it "should calculate correctly if a wildcard has been added" do
       wildcards = {
         "(1X)" => 100.5,
         "(2X)" => 110.3,
         "(3X)" => 120.7
       }
-      with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", wildcards)
+
+      with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", residues, wildcards)
       expect(with_wildcards.weight).to eq(
-        (Peptide.new("XZU").weight + wildcards.values.inject(&:+)).round(2)
+        (Peptide.new("XZU", residues).weight + wildcards.values.inject(&:+)).round(2)
       )
     end
 
@@ -137,9 +145,9 @@ describe Peptide do
         "(2X)" => "110.3",
         "(3X)" => "120.7"
       }
-      with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", wildcards)
+      with_wildcards = Peptide.new("XZU(1X)(2X)(3X)", residues, wildcards)
       expect(with_wildcards.weight).to eq(
-        (Peptide.new("XZU").weight + wildcards.values.map(&:to_f).inject(&:+)).round(2)
+        (Peptide.new("XZU", residues).weight + wildcards.values.map(&:to_f).inject(&:+)).round(2)
       )
     end
 
@@ -149,13 +157,13 @@ describe Peptide do
         "(2X)" => "110.3",
         "(3X)" => ""
       }
-      expect { Peptide.new("XZU(1X)(2X)(3X)", wildcards) }.to raise_error BadSequenceError
+      expect { Peptide.new("XZU(1X)(2X)(3X)", residues, wildcards) }.to raise_error BadSequenceError
     end
 
     it "should not overwrite existing residue weights" do
       wildcard = { "A" => 10 }
-      original_weight = Peptide.new("A").weight
-      expect(Peptide.new("A", wildcard).weight).to eq(original_weight)
+      original_weight = Peptide.new("A", residues).weight
+      expect(Peptide.new("A", residues, wildcard).weight).to eq(original_weight)
     end
   end
 end

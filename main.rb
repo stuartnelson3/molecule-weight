@@ -3,24 +3,18 @@ class NonTerminalAcetylateError < StandardError; end
 
 
 class MassTypes
-  TYPES = ['monoisotopic', 'average']
+  TYPES = {'monoisotopic' => :monoisotopic.freeze,
+           'average' => :average.freeze }
 
+  TYPES.default = TYPES['monoisotopic']
   def self.parse input
-    if TYPES.include? input
-      input
-    else
-      default
-    end
-  end
-
-  def self.default
-    TYPES.first
+    TYPES[input]
   end
 end
 
 class AminoAcids
   attr_reader :residues
-  def initialize
+  def initialize(mass_type)
     @residues = Hash.new {|hash, key|
       raise BadSequenceError, "Could not find weight for amino acid #{key.upcase}"
     }
@@ -82,8 +76,8 @@ end
 
 class Peptide
   attr_reader :molecules, :weight, :combinations, :residues
-  def initialize molecules, wildcards = {}
-    @residues = AminoAcids.new.residues
+  def initialize molecules, residues, wildcards = {}
+    @residues = residues
     add_wildcards wildcards
     @molecules = parse_molecules molecules
     @weight = calculate_weight @molecules, :original
