@@ -36,7 +36,7 @@ function postData(e) {
   var data = {
     peptide_sequence: enteredSequence,
     weight: enteredWeight,
-    wildcards: wildcards
+    wildcards: wildcards,
     mass_type: mass_type,
   };
 
@@ -55,6 +55,7 @@ function postData(e) {
       }
 
       var sequences = Object.keys(seq_objs);
+      $(".result table").empty();
       for (var i = 0; i < sequences.length; i++) {
         var sequence = sequences[i];
         var weight = seq_objs[sequence];
