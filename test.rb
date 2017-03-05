@@ -43,6 +43,17 @@ describe MassTypes do
   end
 end
 
+describe AminoAcids do
+  it 'finds different masses based on mass type' do
+    mono = AminoAcids.new(MassTypes.parse('monoisotopic')).residues
+    avg = AminoAcids.new(MassTypes.parse('average')).residues
+    seq = "AEF(3Q)YXZC*"
+    mono_weight = Peptide.new(seq, mono).weight
+    avg_weight = Peptide.new(seq, avg).weight
+    expect(mono_weight).to_not eq (avg_weight)
+  end
+end
+
 describe Peptide do
   let(:mass_type) { MassTypes.parse('monoisotopic') }
   let(:residues) { AminoAcids.new(mass_type).residues }
