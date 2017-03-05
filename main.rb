@@ -16,7 +16,7 @@ end
 
 class UserInput
   def self.parse input
-    input.downcase.strip.scan(/ac-|\([0-9]?[a-z]\)|[a-z]|\([a-z][0-9]\)/)
+    input.downcase.strip.scan(/ac-|\([0-9]?[a-z]\*?\)|[a-z]\*?|\([a-z]\*?[0-9]\)/)
   end
 end
 

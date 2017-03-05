@@ -3,18 +3,22 @@ require './main'
 
 describe UserInput do
   let(:parser)               { UserInput }
-  let(:expected_parsed_data) { %w(a (3l) (3t) x z) }
+  let(:expected_parsed_data) { %w(a c (3l) (3t) x z c*) }
 
   it "splits on the user input" do
     expect(parser.parse("XZU")).to eq(%w(x z u))
   end
 
   it "splits with the number inputs" do
-    expect(parser.parse("A(3L)(3T)XZ")).to eq(expected_parsed_data)
+    expect(parser.parse("AC(3L)(3T)XZC*")).to eq(expected_parsed_data)
   end
 
   it "handles spaces in the input" do
-    expect(parser.parse("A (3L) (3T) X Z")).to eq(expected_parsed_data)
+    expect(parser.parse("A C (3L) (3T) X Z C*")).to eq(expected_parsed_data)
+  end
+
+  it "differentiates between c and c*" do
+    expect(parser.parse("AC*(3L)(3C*)XZ(C*3)")).to eq(%w(a c* (3l) (3c*) x z (c*3)))
   end
 
   it "parses reversed paren residues" do
