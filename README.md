@@ -4,7 +4,7 @@ Finds possible fragment matches from a peptide, given a fragment weight.
 
 # License
 
-Copyright (c) 2013 Stuart Nelson
+Copyright (c) 2013-2017 Stuart Nelson and James Checco
 
 MIT License
 
