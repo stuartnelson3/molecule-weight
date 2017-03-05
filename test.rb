@@ -43,7 +43,11 @@ describe MassTypes do
   end
 end
 
-describe AminoAcids do
+describe Peptide do
+  let(:mass_type) { MassTypes.parse('monoisotopic') }
+  let(:residues) { AminoAcids.new(mass_type).residues }
+  let(:subject) { Peptide.new("AEF(3A)YXZ", residues) }
+
   it 'finds different masses based on mass type' do
     mono = AminoAcids.new(MassTypes.parse('monoisotopic')).residues
     avg = AminoAcids.new(MassTypes.parse('average')).residues
@@ -52,12 +56,6 @@ describe AminoAcids do
     avg_weight = Peptide.new(seq, avg).weight
     expect(mono_weight).to_not eq (avg_weight)
   end
-end
-
-describe Peptide do
-  let(:mass_type) { MassTypes.parse('monoisotopic') }
-  let(:residues) { AminoAcids.new(mass_type).residues }
-  let(:subject) { Peptide.new("AEF(3A)YXZ", residues) }
 
   it "calculates the molecule weight" do
     expect(subject.weight).to be_within(0.1).of(818.39 + 18)
