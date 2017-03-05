@@ -16,13 +16,14 @@
     <div class="wrapper">
       <div class="headline">
         <h1>Badger Amino Acid Finder</h1>
+        <p>The Badger Amino Acid Finder is a tool to help with the identification of proteolysis products of peptides and alpha/beta-peptides from mass spectrometry data.</p>
         <h2>Instructions</h2>
         <ol class="instructions">
           <li>Enter the sequence of your peptide using standard one letter codes without spaces. Peptides are assumed to be N-terminal amines and C-terminal amides. If the peptide is acetylated, use Ac- as the first residue.</li>
 
           <li>For non-natural residues, (3_) = beta-3 residue [e.g., (3F) ], X = ACPC, Z = APC, U = Aib</li>
 
-          <li>Hit "I'm feeling Lucky" to find expected [M+H]<span class="superscript">+</span></li>
+          <li>Hit "Find fragment matches" to find expected [M+H]<span class="superscript">+</span></li>
 
           <li>When analyzing a proteolysis reaction mixture, entering an observed mass in the bottom box searches for fragments within the sequence that are near that mass.</li>
 
@@ -31,6 +32,8 @@
       </div>
       <%= yield %>
     </div>
-    <footer></footer>
+    <div class="wrapper">
+      <footer><small>&copy; 2013-2017 Developed by James W. Checco and Stuart T. Nelson (<a href="https://github.com/stuartnelson3/molecule-weight" _target="blank">source</a>)</small></footer>
+    </div>
   </body>
 </html>
