@@ -16,7 +16,7 @@ end
 
 class UserInput
   def self.parse input
-    input.downcase.strip.scan(/ac-|\([0-9]?[a-z]\*?\)|[a-z]\*?|\([a-z]\*?[0-9]\)/)
+    input.downcase.strip.scan(/ac-|-nh2|\([0-9]?[a-z]\*?\)|[a-z]\*?|\([a-z]\*?[0-9]\)/)
   end
 end
 
@@ -26,7 +26,7 @@ class Peptide
     @residues = residues
     add_wildcards wildcards
     @molecules = parse_molecules molecules
-    @weight = calculate_weight @molecules, :original
+    @weight = calculate_weight @molecules
     @combinations = MoleculeCombinations.find_for @molecules
   end
 
@@ -52,8 +52,8 @@ class Peptide
     end
   end
 
-  def calculate_weight molecules, original = false
-    FragmentWeight.new(@molecules, @residues).calculate molecules, original
+  def calculate_weight molecules
+    FragmentWeight.new(@molecules, @residues).calculate molecules
   end
 
   def combination_in_range combo, weight
@@ -86,21 +86,22 @@ class FragmentWeight
     @residues = residues
   end
 
-  def calculate molecules, original = false
-    weight_adjustment = calculate_adjustment molecules, original
+  def calculate molecules
+    weight_adjustment = calculate_adjustment molecules
     weights = molecules.map {|m| @residues[m] }
     weights.inject(&:+).round(2) + weight_adjustment
   end
 
-  def calculate_adjustment molecules, original
-    if original || end_of_fragment?(molecules)
+  def calculate_adjustment molecules
+    # Check for -NH2
+    if c_terminal_amide?(molecules)
       18
     else
       19
     end
   end
 
-  def end_of_fragment? molecules
-    @molecules[-molecules.length, molecules.length] == molecules
+  def c_terminal_amide? molecules
+    @molecules.last == '-nh2'
   end
 end

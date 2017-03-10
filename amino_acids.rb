@@ -65,6 +65,8 @@ class AminoAcids
       "x" => 111.07,
       "y" => 163.06333,
       "z" => 112.06,
+      # This is only used to calculate the final weight adjustment.
+      "-nh2" => 0,
     }
   end
 
@@ -116,6 +118,8 @@ class AminoAcids
       "x" => 111.140,
       "y" => 163.170,
       "z" => 112.130,
+      # This is only used to calculate the final weight adjustment.
+      "-nh2" => 0,
     }
   end
 end

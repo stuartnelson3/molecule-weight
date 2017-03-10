@@ -177,3 +177,11 @@ footer {
 .mass-select label {
   margin-right: 80px;
 }
+
+.nested-list {
+  margin-left: 2em;
+}
+
+.disc {
+  list-style-type: disc;
+}

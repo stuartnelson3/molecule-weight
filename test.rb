@@ -58,7 +58,7 @@ describe Peptide do
   end
 
   it "calculates the molecule weight" do
-    expect(subject.weight).to be_within(0.1).of(818.39 + 18)
+    expect(subject.weight).to be_within(0.1).of(818.39 + 19)
   end
 
   it "knows the possible combinations of the molecules" do
@@ -103,11 +103,11 @@ describe Peptide do
   end
 
   it "knows the weight of a combination" do
-    expect(Peptide.new("XZU", residues).weight).to eq(308.18 + 18)
+    expect(Peptide.new("XZU", residues).weight).to eq(308.18 + 19)
   end
 
   it "lists a sequence based on a molecular weight" do
-    yxz_weight = 163.06 + 111.07 + 112.06 + 18
+    yxz_weight = 163.06 + 111.07 + 112.06 + 19
     expect(subject.possible_sequences(yxz_weight)).to eq({ "YXZ" => yxz_weight.round(2) })
   end
 
@@ -117,14 +117,17 @@ describe Peptide do
   end
 
   context "end and non-end fragments" do
-    it "adds 18 to end fragments" do
-      expected_weight = 163.06 + 111.07 + 112.06 + 18
-      expect(subject.calculate_weight(['y','x','z'])).to eq(expected_weight.round(2))
+    let(:seq) { ['y','x','z','-nh2'] }
+    let(:weight) { 163.06 + 111.07 + 112.06 }
+    it "C-terminal amide adds 18 (ends with -NH2)" do
+      expected_weight = weight + 18
+      pep = Peptide.new("Ac-AEF(3A)YXZ-NH2", residues)
+      expect(pep.calculate_weight(seq + ['-nh2'])).to eq(expected_weight.round(2))
     end
 
-    it "adds 19 to non-ending fragments" do
-      expected_weight = 71.04 + 129.04 + 147.07 + 19
-      expect(subject.calculate_weight(['a','e','f'])).to eq(expected_weight.round(2))
+    it "N-terminal amines and C-terminal acids add 19" do
+      expected_weight = weight + 19
+      expect(subject.calculate_weight(seq)).to eq(expected_weight.round(2))
     end
   end
 
