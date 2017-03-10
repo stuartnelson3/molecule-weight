@@ -5,6 +5,10 @@ $(document).on("keypress", function(e) {
   }
 });
 
+$(document).on('input', '.js-range-input', function(e) {
+  $('.js-range-value').html(e.currentTarget.value);
+});
+
 function weightSimilarity(enteredWeight, weight) {
   var absoluteDiff = Math.abs(enteredWeight - weight);
   if (absoluteDiff <= 1.5) {
@@ -32,12 +36,14 @@ function postData(e) {
   }
   var mass_type = $(".mass-select select").val();
   var enteredSequence = $("input[name=peptide_sequence]").val();
+  var tolerance = $(".js-range-input").val();
 
   var data = {
     peptide_sequence: enteredSequence,
     weight: enteredWeight,
     wildcards: wildcards,
     mass_type: mass_type,
+    tolerance: tolerance,
   };
 
   var params = {
@@ -54,17 +60,24 @@ function postData(e) {
         return;
       }
 
-      var sequences = Object.keys(seq_objs);
+      // Sort closest value to found mass at top.
+      var sequences = []
+      for (var k in seq_objs) {
+        sequences.push({'sequence': k, 'weight': seq_objs[k]});
+      }
+      sequences = sequences.sort(function(a, b) {
+        return Math.abs(a.weight - enteredWeight) - Math.abs(b.weight - enteredWeight);
+      });
       $(".result table").empty();
-      for (var i = 0; i < sequences.length; i++) {
-        var sequence = sequences[i];
-        var weight = seq_objs[sequence];
+      sequences.forEach(function(match) {
+        var sequence = match.sequence;
+        var weight = match.weight;
         var regex = /no matches found/i;
         var color = (regex.test(sequence) && 'red') || weightSimilarity(enteredWeight, weight);
         $(".result table").
           append("<tr class="+color+">\
                    <td class='found-sequence'>"+sequence+"</td><td>"+weight+"</td></tr>");
-      }
+      });
     }
   }
 

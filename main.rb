@@ -56,13 +56,13 @@ class Peptide
     FragmentWeight.new(@molecules, @residues).calculate molecules
   end
 
-  def combination_in_range combo, weight
-    (calculate_weight(combo) - weight).abs <= 5
+  def combination_in_range combo, weight, tolerance
+    (calculate_weight(combo) - weight).abs <= tolerance
   end
 
-  def possible_sequences weight
+  def possible_sequences weight, tolerance
     matches = combinations.select {|combo|
-      combination_in_range combo, weight
+      combination_in_range combo, weight, tolerance
     }
     weights = matches.map {|m| calculate_weight(m) }
     matches.map!(&:join).map! {|seq| seq.upcase.gsub(/AC-/,"Ac-") }

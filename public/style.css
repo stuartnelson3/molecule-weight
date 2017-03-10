@@ -185,3 +185,11 @@ footer {
 .disc {
   list-style-type: disc;
 }
+
+.tolerance-select {
+  margin-bottom: 15px;
+}
+
+.range-input {
+  margin-right: 15px;
+}

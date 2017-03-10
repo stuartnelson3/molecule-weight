@@ -88,7 +88,7 @@ describe Peptide do
 
     it "correctly formats results that include Ac-" do
       weight = residues['ac-'] + residues['a'] + 19
-      expect(subject.possible_sequences(weight).keys).to include("Ac-A")
+      expect(subject.possible_sequences(weight, 5).keys).to include("Ac-A")
     end
 
     context NonTerminalAcetylateError do
@@ -108,12 +108,22 @@ describe Peptide do
 
   it "lists a sequence based on a molecular weight" do
     yxz_weight = 163.06 + 111.07 + 112.06 + 19
-    expect(subject.possible_sequences(yxz_weight)).to eq({ "YXZ" => yxz_weight.round(2) })
+    expect(subject.possible_sequences(yxz_weight, 5)).to eq({ "YXZ" => yxz_weight.round(2) })
+  end
+
+  context "tolerance" do
+    it "correctly uses tolerance" do
+      # Missing +19 weight adjustment
+      yxz_weight = 163.06 + 111.07 + 112.06
+      expect(subject.possible_sequences(yxz_weight, 5)).to eq({ "No matches found" => yxz_weight.round(2) })
+
+      expect(subject.possible_sequences(yxz_weight, 5+19)).to_not eq({ "No matches found" => yxz_weight.round(2) })
+    end
   end
 
   it "notifies the user if there were no matches" do
     weight = 43532523354235
-    expect(subject.possible_sequences(weight)).to eq({ "No matches found" => weight })
+    expect(subject.possible_sequences(weight, 5)).to eq({ "No matches found" => weight })
   end
 
   context "end and non-end fragments" do
